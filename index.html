@@ -1,0 +1,7921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4EFE4">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23B44935'/%3E%3Crect x='7' y='7' width='50' height='50' rx='8' fill='none' stroke='%23F4E6CD' stroke-opacity='.55'/%3E%3Ccircle cx='32' cy='32' r='17' fill='none' stroke='%23F8EEDC' stroke-width='2'/%3E%3Crect x='27' y='27' width='10' height='10' rx='1.5' fill='none' stroke='%23F8EEDC' stroke-width='2'/%3E%3C/svg%3E">
+<meta name="description" content="你适合发什么财？用 18 道具体情境题，从五行财性与四项生财能力两个角度，生成一份可执行的个人生财说明书。">
+<title>你适合发什么财？｜五行财性测评</title>
+<style>
+/* =========================================================
+   生财有方 · 五行财性测评
+   单文件、离线、无外部依赖
+   ========================================================= */
+
+:root {
+  --paper: #f4efe4;
+  --paper-deep: #ece4d4;
+  --paper-light: #fbf7ee;
+  --cream: #fffaf0;
+  --ink: #1d2b23;
+  --ink-soft: #435047;
+  --ink-muted: #6f786f;
+  --gold: #ae8850;
+  --gold-light: #d7c19b;
+  --line: #ded3c0;
+  --line-strong: #c9b99d;
+  --red: #b44935;
+  --red-dark: #913725;
+  --red-soft: #f4e4dc;
+  --green: #476a56;
+  --blue: #4b6a7b;
+  --ochre: #8c6944;
+  --font-serif: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+  --font-sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  --font-latin: "Georgia", "Times New Roman", serif;
+  --max-width: 1180px;
+  --gutter: 24px;
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --shadow-soft: 0 22px 60px rgba(60, 44, 25, 0.09);
+  --shadow-lift: 0 28px 70px rgba(55, 40, 22, 0.14);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(circle at 9% 2%, rgba(255, 253, 247, 0.9), transparent 28%),
+    radial-gradient(circle at 96% 18%, rgba(199, 177, 141, 0.16), transparent 30%),
+    linear-gradient(180deg, #f5f0e6 0%, #f2ebdf 54%, #f4efe4 100%);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: multiply;
+}
+
+::selection {
+  background: rgba(180, 73, 53, 0.18);
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+svg {
+  display: block;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.svg-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.wrap {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--max-width));
+  margin-inline: auto;
+}
+
+.view:not([hidden]) {
+  animation: view-in 0.45s ease both;
+}
+
+/* ---------- 基础组件 ---------- */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 25px;
+  height: 1px;
+  flex: 0 0 auto;
+  background: var(--gold);
+}
+
+.eyebrow--light {
+  color: rgba(250, 245, 233, 0.62);
+}
+
+.eyebrow--light::before {
+  background: var(--gold-light);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    background-color 0.24s ease,
+    border-color 0.24s ease,
+    color 0.24s ease,
+    box-shadow 0.24s ease,
+    transform 0.24s ease;
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper-light);
+  box-shadow: 0 12px 28px rgba(29, 43, 35, 0.18);
+}
+
+.btn-primary:hover {
+  background: #2a3b30;
+  box-shadow: 0 16px 36px rgba(29, 43, 35, 0.22);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary--red {
+  background: var(--red);
+  box-shadow: 0 12px 28px rgba(180, 73, 53, 0.2);
+}
+
+.btn-primary--red:hover {
+  background: var(--red-dark);
+}
+
+.btn-ghost {
+  border-color: var(--line-strong);
+  background: rgba(255, 251, 242, 0.4);
+}
+
+.btn-ghost:hover {
+  border-color: var(--ink-soft);
+  background: rgba(255, 251, 242, 0.8);
+  transform: translateY(-2px);
+}
+
+.btn-light {
+  background: var(--paper-light);
+  color: var(--ink);
+}
+
+.btn-light:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-small {
+  min-height: 42px;
+  padding-inline: 18px;
+  font-size: 12.5px;
+}
+
+.btn-small svg {
+  width: 15px;
+  height: 15px;
+}
+
+.btn-text {
+  min-height: 44px;
+  padding: 0;
+  border-radius: 0;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.btn-text:hover {
+  color: var(--red);
+}
+
+.btn-text svg {
+  transition: transform 0.24s ease;
+}
+
+.btn-text:hover svg {
+  transform: translateX(3px);
+}
+
+.btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.35;
+  transform: none !important;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.brand-seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  background: var(--red);
+  color: #fff5e3;
+  font-family: var(--font-serif);
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 5px 14px rgba(145, 55, 37, 0.2);
+  transform: rotate(-3deg);
+}
+
+.brand-seal::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(255, 244, 226, 0.5);
+  border-radius: 4px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.brand-text strong {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  line-height: 1.25;
+}
+
+.brand-text small {
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 8px;
+  letter-spacing: 0.19em;
+  line-height: 1.4;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 13px;
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 4px;
+  transition: color 0.2s ease;
+}
+
+.text-link:hover {
+  color: var(--red);
+}
+
+/* ---------- 首页头部 ---------- */
+
+.home-view {
+  position: relative;
+}
+
+.home-header {
+  position: relative;
+  z-index: 20;
+  padding-top: 26px;
+}
+
+.home-header .wrap {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.home-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-left: auto;
+}
+
+.nav-link {
+  position: relative;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  left: 0;
+  height: 1px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.25s ease;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.home-header .btn {
+  margin-left: 4px;
+}
+
+/* ---------- 首页 Hero ---------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(420px, 0.96fr);
+  align-items: center;
+  gap: clamp(22px, 4vw, 64px);
+  min-height: 690px;
+  padding: 22px 0 40px;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-copy > * {
+  animation: rise-in 0.7s cubic-bezier(0.22, 0.7, 0.25, 1) both;
+}
+
+.hero-copy > :nth-child(1) {
+  animation-delay: 0.03s;
+}
+
+.hero-copy > :nth-child(2) {
+  animation-delay: 0.09s;
+}
+
+.hero-copy > :nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.hero-copy > :nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.hero-copy > :nth-child(5),
+.hero-copy > :nth-child(6) {
+  animation-delay: 0.26s;
+}
+
+.hero-title {
+  max-width: 7.6em;
+  margin: 20px 0 24px;
+  font-family: var(--font-serif);
+  font-size: clamp(4.1rem, 7.2vw, 6.9rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.03;
+}
+
+.hero-title .title-line {
+  display: block;
+}
+
+.hero-title .title-line--accent {
+  margin-top: 0.06em;
+}
+
+.hero-title em {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  isolation: isolate;
+  color: var(--red);
+  font-style: normal;
+}
+
+.hero-title em::after {
+  content: "";
+  position: absolute;
+  right: -3%;
+  bottom: 0.04em;
+  left: -2%;
+  z-index: -1;
+  height: 0.2em;
+  border-radius: 50%;
+  background: linear-gradient(90deg, rgba(174, 136, 80, 0.38), rgba(174, 136, 80, 0.12));
+  transform: rotate(-1.2deg);
+}
+
+.hero-title .qmark {
+  display: inline-block;
+  margin-left: 0.05em;
+  color: var(--gold);
+  font-size: 0.58em;
+  vertical-align: 0.38em;
+}
+
+.hero-lead {
+  max-width: 35em;
+  color: var(--ink-soft);
+  font-size: clamp(1rem, 1.35vw, 1.12rem);
+  line-height: 1.9;
+}
+
+.hero-sub {
+  max-width: 36em;
+  margin-top: 12px;
+  color: var(--ink-muted);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+  margin-top: 30px;
+}
+
+.hero-actions .btn-primary {
+  min-height: 56px;
+  padding-inline: 27px;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 0;
+  margin-top: 30px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+
+.hero-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.hero-meta span + span::before {
+  content: "";
+  width: 3px;
+  height: 3px;
+  margin: 0 13px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.hero-meta b {
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.resume-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 18px;
+  padding: 10px 12px 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 250, 240, 0.68);
+  animation: rise-in 0.55s ease both;
+}
+
+.resume-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+}
+
+.resume-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.resume-copy {
+  min-width: 0;
+}
+
+.resume-copy p {
+  overflow: hidden;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resume-copy strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.resume-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.resume-continue {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper-light);
+  font-size: 11.5px;
+  line-height: 1;
+  transition: background-color 0.2s ease;
+}
+
+.resume-continue:hover {
+  background: #2b3d31;
+}
+
+.resume-reset {
+  min-height: 34px;
+  padding: 0 7px;
+  border: 0;
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 11px;
+    text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.resume-reset:hover {
+  color: var(--red);
+}
+
+.hero-visual {
+  position: relative;
+  width: min(100%, 590px);
+  justify-self: end;
+  animation: art-in 1s 0.12s cubic-bezier(0.22, 0.7, 0.25, 1) both;
+}
+
+.visual-frame {
+  position: absolute;
+  inset: 6% 0 10% 2%;
+  z-index: -1;
+  border: 1px solid rgba(174, 136, 80, 0.3);
+  border-radius: 49% 49% 20% 20% / 39% 39% 14% 14%;
+  transform: rotate(2.2deg);
+}
+
+.hero-illustration {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.orbit-ring {
+  transform-origin: 320px 322px;
+  animation: orbit-spin 80s linear infinite;
+}
+
+.orbit-dot {
+  animation: orbit-pulse 5.5s ease-in-out infinite;
+}
+
+.orbit-dot:nth-of-type(2) {
+  animation-delay: 1.5s;
+}
+
+.art-caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: -8px;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-align: center;
+}
+
+.art-caption::before,
+.art-caption::after {
+  content: "";
+  width: 30px;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.vertical-mark {
+  position: absolute;
+  top: 27%;
+  right: -27px;
+  color: rgba(67, 80, 71, 0.55);
+  font-family: var(--font-serif);
+  font-size: 11px;
+  letter-spacing: 0.38em;
+  line-height: 1.9;
+  writing-mode: vertical-rl;
+}
+
+/* ---------- 首页品牌条 ---------- */
+
+.manifesto {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(251, 247, 238, 0.42);
+}
+
+.manifesto .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 11px 24px;
+  padding: 19px 0;
+  color: var(--ink-muted);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+.manifesto i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold-light);
+}
+
+/* ---------- 首页五种财性 ---------- */
+
+.section {
+  padding-top: 104px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 44px;
+  margin-bottom: 36px;
+}
+
+.section-heading h2 {
+  margin-top: 15px;
+  font-family: var(--font-serif);
+  font-size: clamp(2.35rem, 4.2vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.22;
+}
+
+.section-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.section-kicker::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.section-side {
+  max-width: 350px;
+  padding-bottom: 7px;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.85;
+}
+
+.section-side .section-index {
+  display: block;
+  margin-top: 14px;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.types-grid:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 5px;
+  border-radius: 12px;
+}
+
+.type-card {
+  --el: var(--gold);
+  --el-soft: #f1e5d0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 334px;
+  padding: 24px 19px 20px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.9) 0%, rgba(249, 244, 234, 0.64) 100%);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.type-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--el);
+  opacity: 0.82;
+}
+
+.type-card::after {
+  content: "";
+  position: absolute;
+  right: -36px;
+  bottom: -45px;
+  width: 130px;
+  height: 130px;
+  border: 1px solid var(--el);
+  border-radius: 50%;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.type-card:hover {
+  border-color: var(--el);
+  box-shadow: 0 18px 34px rgba(63, 46, 26, 0.09);
+  transform: translateY(-5px);
+}
+
+.type-card[data-element="金"] {
+  --el: #a57939;
+  --el-soft: #f1e4cd;
+}
+
+.type-card[data-element="木"] {
+  --el: #497158;
+  --el-soft: #e1ebe3;
+}
+
+.type-card[data-element="水"] {
+  --el: #4b6c7e;
+  --el-soft: #e1ebef;
+}
+
+.type-card[data-element="火"] {
+  --el: #b64e39;
+  --el-soft: #f4e1da;
+}
+
+.type-card[data-element="土"] {
+  --el: #8e6a44;
+  --el-soft: #ede2d2;
+}
+
+.type-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.type-no {
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.type-icon-wrap {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  border: 1px solid color-mix(in srgb, var(--el) 32%, transparent);
+  border-radius: 50%;
+  color: var(--el);
+  background: var(--el-soft);
+}
+
+.type-icon-wrap svg {
+  width: 24px;
+  height: 24px;
+}
+
+.type-card h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin-top: 28px;
+  font-family: var(--font-serif);
+  font-size: 1.48rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+.type-card h3 .type-char {
+  color: var(--el);
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.type-card p {
+  flex: 1;
+  margin-top: 12px;
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  line-height: 1.85;
+}
+
+.type-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  margin-top: 18px;
+  color: var(--ink-muted);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.type-tags span::before {
+  content: "#";
+  margin-right: 2px;
+  color: var(--el);
+}
+
+.types-footnote {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  color: var(--ink-muted);
+  font-size: 11.5px;
+  line-height: 1.7;
+}
+
+.types-footnote .mini-seal {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  color: var(--gold);
+  font-family: var(--font-serif);
+  font-size: 12px;
+}
+
+.swipe-hint {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  margin-top: 13px;
+  color: var(--ink-muted);
+  font-size: 11px;
+}
+
+.swipe-hint svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ---------- 金句 ---------- */
+
+.quote-block {
+  position: relative;
+  max-width: 930px;
+  margin: 104px auto 0;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.quote-block::before {
+  content: "“";
+  position: absolute;
+  top: -38px;
+  left: 50%;
+  color: var(--gold);
+  font-family: var(--font-latin);
+  font-size: 76px;
+  line-height: 1;
+  opacity: 0.28;
+  transform: translateX(-50%);
+}
+
+.quote-block blockquote {
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.45rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.65;
+}
+
+.quote-block em {
+  color: var(--red);
+  font-style: normal;
+}
+
+.quote-block figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  color: var(--ink-muted);
+  font-size: 10px;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.quote-block figcaption::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+/* ---------- 测评方法 ---------- */
+
+.method-panel {
+  position: relative;
+  margin-top: 104px;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper-light);
+}
+
+.method-panel::before {
+  content: "";
+  position: absolute;
+  top: -260px;
+  right: -110px;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(174, 136, 80, 0.17), transparent 67%);
+  pointer-events: none;
+}
+
+.method-panel::after {
+  content: "方";
+  position: absolute;
+  right: 4%;
+  bottom: -26%;
+  color: rgba(255, 248, 235, 0.035);
+  font-family: var(--font-serif);
+  font-size: clamp(280px, 42vw, 600px);
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.method-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(48px, 8vw, 116px);
+  padding-top: 84px;
+  padding-bottom: 58px;
+}
+
+.method-intro h2 {
+  margin-top: 18px;
+  color: var(--paper-light);
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 4vw, 3.9rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.24;
+}
+
+.method-intro > p {
+  max-width: 32em;
+  margin-top: 24px;
+  color: rgba(247, 241, 228, 0.7);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.method-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 31em;
+  margin-top: 34px;
+  padding: 15px 16px;
+  border: 1px solid rgba(217, 198, 164, 0.2);
+  border-radius: 13px;
+  background: rgba(255, 250, 239, 0.04);
+}
+
+.seal-small {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(217, 198, 164, 0.45);
+  border-radius: 5px;
+  color: var(--gold-light);
+  font-family: var(--font-serif);
+  font-size: 11px;
+}
+
+.method-note p {
+  color: rgba(247, 241, 228, 0.55);
+  font-size: 11.5px;
+  line-height: 1.75;
+}
+
+.method-steps {
+  border-top: 1px solid rgba(222, 208, 183, 0.18);
+}
+
+.method-step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 22px;
+  padding: 25px 0 26px;
+  border-bottom: 1px solid rgba(222, 208, 183, 0.18);
+}
+
+.method-step-no {
+  color: var(--gold-light);
+  font-family: var(--font-latin);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+.method-step h3 {
+  color: var(--paper-light);
+  font-family: var(--font-serif);
+  font-size: 1.38rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.method-step p {
+  max-width: 42em;
+  margin-top: 8px;
+  color: rgba(247, 241, 228, 0.6);
+  font-size: 13px;
+  line-height: 1.85;
+}
+
+.formula {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.formula span {
+  padding: 4px 8px;
+  border: 1px solid rgba(217, 198, 164, 0.22);
+  border-radius: 5px;
+  color: rgba(250, 243, 228, 0.76);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.method-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 26px;
+  padding: 24px 0 34px;
+  border-top: 1px solid rgba(222, 208, 183, 0.18);
+}
+
+.mini-elements {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.mini-el {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border: 1px solid rgba(247, 241, 228, 0.22);
+  border-radius: 50%;
+  color: rgba(250, 244, 232, 0.72);
+  font-family: var(--font-serif);
+  font-size: 12px;
+}
+
+.mini-el:nth-child(1) {
+  color: #e2c78d;
+}
+
+.mini-el:nth-child(2) {
+  color: #a8c2ad;
+}
+
+.mini-el:nth-child(3) {
+  color: #a9c5d3;
+}
+
+.mini-el:nth-child(4) {
+  color: #e3ad9d;
+}
+
+.mini-el:nth-child(5) {
+  color: #d4bc98;
+}
+
+.method-bottom .btn {
+  flex: 0 0 auto;
+}
+
+/* ---------- 关于与页脚 ---------- */
+
+.about-measure {
+  padding-top: 86px;
+}
+
+.about-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-heading h2 {
+  margin-top: 15px;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+}
+
+.about-heading > p {
+  max-width: 320px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+
+.about-item {
+  padding: 25px 26px 4px 0;
+}
+
+.about-item + .about-item {
+  padding-left: 30px;
+  border-left: 1px solid var(--line);
+}
+
+.about-item span {
+  color: var(--gold);
+  font-family: var(--font-latin);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+}
+
+.about-item h3 {
+  margin-top: 10px;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.about-item p {
+  margin-top: 8px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.home-footer {
+  margin-top: 70px;
+  border-top: 1px solid var(--line);
+  background: rgba(250, 245, 236, 0.44);
+}
+
+.footer-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 52px;
+  padding: 42px 0 30px;
+}
+
+.footer-brand {
+  flex: 0 0 auto;
+}
+
+.footer-brand .brand-text strong {
+  font-size: 17px;
+}
+
+.footer-slogan {
+  margin-top: 16px;
+  color: var(--ink-muted);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.footer-disclaimer {
+  max-width: 660px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  line-height: 1.85;
+}
+
+.footer-disclaimer strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 16px 0 26px;
+  border-top: 1px solid rgba(201, 185, 157, 0.4);
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+}
+
+/* =========================================================
+   答题页
+   ========================================================= */
+
+.quiz-view {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 252, 245, 0.72), transparent 38%),
+    linear-gradient(180deg, #f4efe4 0%, #f1eadd 100%);
+}
+
+.quiz-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid rgba(201, 185, 157, 0.55);
+  background: rgba(244, 239, 228, 0.84);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.quiz-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  width: min(calc(100% - (var(--gutter) * 2)), 920px);
+  min-height: 65px;
+  margin-inline: auto;
+}
+
+.quiz-header .brand {
+  gap: 9px;
+}
+
+.quiz-header .brand-seal {
+  width: 33px;
+  height: 33px;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.quiz-header .brand-seal::after {
+  inset: 3px;
+  border-radius: 3px;
+}
+
+.quiz-header .brand-text strong {
+  font-size: 15px;
+}
+
+.quiz-header .brand-text small {
+  font-size: 6.5px;
+}
+
+.quiz-header-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--line);
+}
+
+.quiz-header-title {
+  color: var(--ink-muted);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.quiz-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  margin-left: auto;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 251, 242, 0.42);
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  line-height: 1;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.quiz-exit:hover {
+  border-color: var(--ink-muted);
+  background: rgba(255, 251, 242, 0.8);
+  color: var(--ink);
+}
+
+.quiz-exit svg {
+  width: 14px;
+  height: 14px;
+}
+
+.quiz-main {
+  width: min(calc(100% - (var(--gutter) * 2)), 880px);
+  margin-inline: auto;
+  padding: 34px 0 58px;
+}
+
+.quiz-progress {
+  margin-bottom: 21px;
+}
+
+.progress-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 13px;
+}
+
+.quiz-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.quiz-act::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.quiz-counter {
+  margin-top: 4px;
+  color: var(--ink-muted);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  letter-spacing: 0.03em;
+}
+
+.progress-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+.progress-saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ink-muted);
+  font-size: 10px;
+}
+
+.progress-saved svg {
+  width: 12px;
+  height: 12px;
+}
+
+.progress-track {
+  position: relative;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(201, 185, 157, 0.45);
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--red) 0%, #c7755e 100%);
+  transition: width 0.35s cubic-bezier(0.22, 0.7, 0.25, 1);
+}
+
+.review-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 15px;
+  padding: 10px 12px 10px 14px;
+  border: 1px solid #d6c19b;
+  border-radius: 11px;
+  background: #f3e8d4;
+  color: #715934;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.review-bar > span {
+  min-width: 0;
+}
+
+.review-finish {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  flex: 0 0 auto;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper-light);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.review-finish:hover {
+  background: #33463a;
+}
+
+.review-finish svg {
+  width: 13px;
+  height: 13px;
+}
+
+.answer-map {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 11px;
+}
+
+.map-btn {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: rgba(255, 251, 243, 0.48);
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 10.5px;
+  line-height: 1;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.map-btn.is-answered {
+  border-color: rgba(75, 106, 123, 0.35);
+  background: rgba(222, 233, 237, 0.6);
+  color: #385365;
+}
+
+.map-btn.is-current {
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff7e9;
+}
+
+.map-btn:hover {
+  border-color: var(--ink-muted);
+  color: var(--ink);
+}
+
+.quiz-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(26px, 5vw, 52px) clamp(22px, 5.2vw, 58px) clamp(22px, 4vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background:
+    linear-gradient(135deg, rgba(255, 253, 247, 0.56), transparent 45%),
+    var(--paper-light);
+  box-shadow: var(--shadow-soft);
+}
+
+.quiz-card::before {
+  content: "";
+  position: absolute;
+  top: 42px;
+  left: 0;
+  width: 3px;
+  height: 45px;
+  border-radius: 0 3px 3px 0;
+  background: var(--red);
+}
+
+.quiz-card::after {
+  content: "问";
+  position: absolute;
+  right: 28px;
+  bottom: 16px;
+  color: rgba(174, 136, 80, 0.08);
+  font-family: var(--font-serif);
+  font-size: 86px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.question-panel {
+  position: relative;
+  z-index: 1;
+  animation: question-in 0.36s cubic-bezier(0.22, 0.7, 0.25, 1) both;
+}
+
+.question-kicker {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.question-kicker::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.question-title {
+  max-width: 15em;
+  margin: 16px 0 11px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(1.55rem, 3.2vw, 2.42rem);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.46;
+}
+
+.question-help {
+  margin-bottom: 27px;
+  color: var(--ink-muted);
+  font-size: 11.5px;
+  line-height: 1.75;
+}
+
+.options {
+  display: grid;
+  gap: 11px;
+}
+
+.option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 33px minmax(0, 1fr) 22px;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 63px;
+  padding: 13px 16px;
+  border: 1px solid #dfd4c1;
+  border-radius: 13px;
+  background: rgba(255, 252, 246, 0.52);
+  color: var(--ink-soft);
+  text-align: left;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.option:hover {
+  border-color: #b9a98f;
+  background: rgba(255, 252, 246, 0.9);
+}
+
+.option:active {
+  transform: scale(0.996);
+}
+
+.option-letter {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border: 1px solid #d3c5ae;
+  border-radius: 50%;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 11px;
+  line-height: 1;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.option-text {
+  font-size: 14.5px;
+  line-height: 1.72;
+}
+
+.option-check {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  border: 1px solid #d3c5ae;
+  border-radius: 50%;
+  opacity: 0.8;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.option:focus-visible {
+  outline-color: var(--gold);
+  outline-width: 2px;
+  outline-offset: 3px;
+}
+
+.option[aria-checked="true"] {
+  border-color: var(--red);
+  background: var(--red-soft);
+  box-shadow: inset 0 0 0 1px rgba(180, 73, 53, 0.08);
+  color: var(--ink);
+}
+
+.option[aria-checked="true"] .option-letter {
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff8ec;
+}
+
+.option[aria-checked="true"] .option-check {
+  border-color: var(--red);
+  background: var(--red);
+  opacity: 1;
+}
+
+.option[aria-checked="true"] .option-check::after {
+  content: "";
+  width: 7px;
+  height: 4px;
+  border-bottom: 1.5px solid #fff8ec;
+  border-left: 1.5px solid #fff8ec;
+  transform: translateY(-1px) rotate(-45deg);
+}
+
+.quiz-card.is-nudged {
+  animation: nudge 0.35s ease;
+}
+
+.answer-hint {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 15px;
+  padding: 10px 13px;
+  border: 1px solid rgba(180, 73, 53, 0.2);
+  border-radius: 10px;
+  background: var(--red-soft);
+  color: var(--red-dark);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.answer-hint > span {
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff8ec;
+  font-family: var(--font-latin);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.answer-hint p {
+  min-width: 0;
+}
+
+.quiz-controls {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 48px;
+  padding: 0 15px 0 7px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 12px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.btn-back:hover:not(:disabled) {
+  background: rgba(236, 228, 212, 0.65);
+  color: var(--ink);
+}
+
+.btn-back svg {
+  width: 17px;
+  height: 17px;
+}
+
+.btn-back:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+.control-note {
+  flex: 1;
+  color: var(--ink-muted);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.btn-next {
+  min-width: 158px;
+  min-height: 48px;
+  margin-left: auto;
+  gap: 9px;
+  font-size: 13px;
+}
+
+.btn-next svg {
+  transition: transform 0.22s ease;
+}
+
+.btn-next:hover svg {
+  transform: translateX(3px);
+}
+
+.quiz-footnote {
+  margin-top: 22px;
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.quiz-footnote span {
+  color: var(--ink-soft);
+}
+
+/* =========================================================
+   结果页
+   ========================================================= */
+
+.result-view {
+  --accent: #a57939;
+  --accent-deep: #6f4e21;
+  --accent-soft: #f1e4cc;
+  --accent-wash: #e5d3af;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 88% 4%, rgba(197, 171, 126, 0.15), transparent 29%),
+    linear-gradient(180deg, #f4efe4 0%, #f1eadc 100%);
+}
+
+.result-header {
+  padding-top: 24px;
+}
+
+.result-header .wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.result-header .brand {
+  gap: 10px;
+}
+
+.result-header .brand-seal {
+  width: 37px;
+  height: 37px;
+  font-size: 20px;
+}
+
+.result-header .brand-text strong {
+  font-size: 16px;
+}
+
+.result-header .brand-text small {
+  font-size: 7px;
+}
+
+.result-header-action {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-left: auto;
+}
+
+.result-header-note {
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.result-home-link {
+  min-height: 37px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 251, 242, 0.36);
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  line-height: 1;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.result-home-link:hover {
+  border-color: var(--ink-muted);
+  background: rgba(255, 251, 242, 0.7);
+}
+
+.result-main {
+  width: min(calc(100% - (var(--gutter) * 2)), 1120px);
+  margin-inline: auto;
+  padding: 27px 0 0;
+}
+
+.result-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.14fr) minmax(350px, 0.86fr);
+  align-items: center;
+  gap: 34px;
+  overflow: hidden;
+  min-height: 490px;
+  padding: clamp(28px, 4.8vw, 58px);
+  border: 1px solid rgba(201, 185, 157, 0.82);
+  border-radius: 28px;
+  background:
+    linear-gradient(112deg, rgba(255, 252, 245, 0.96) 0%, rgba(250, 245, 234, 0.88) 54%, rgba(240, 229, 209, 0.7) 100%);
+  box-shadow: var(--shadow-soft);
+  animation: result-rise 0.7s cubic-bezier(0.22, 0.7, 0.25, 1) both;
+}
+
+.result-hero::before {
+  content: "";
+  position: absolute;
+  top: -190px;
+  right: -170px;
+  z-index: -1;
+  width: 650px;
+  height: 650px;
+  border: 1px solid rgba(174, 136, 80, 0.2);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-soft), transparent 66%);
+  opacity: 0.9;
+}
+
+.result-hero::after {
+  content: "";
+  position: absolute;
+  right: 10%;
+  bottom: -170px;
+  z-index: -1;
+  width: 490px;
+  height: 490px;
+  border: 1px dashed rgba(174, 136, 80, 0.24);
+  border-radius: 50%;
+}
+
+.result-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  color: var(--ink-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.6;
+}
+
+.result-kicker::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.small-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-muted);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+
+.result-name-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.result-seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 61px;
+  height: 61px;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff9ed;
+  font-family: var(--font-serif);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 28%, transparent);
+  transform: rotate(-3deg);
+}
+
+.result-seal::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(255, 249, 237, 0.48);
+  border-radius: 5px;
+}
+
+.result-element-label {
+  color: var(--accent-deep);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.result-name-row h1 {
+  margin-top: 2px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 4.6vw, 4.25rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.result-motto {
+  max-width: 27em;
+  margin-top: 19px;
+  color: var(--accent-deep);
+  font-family: var(--font-serif);
+  font-size: clamp(1.18rem, 1.8vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+}
+
+.result-summary {
+  max-width: 39em;
+  margin-top: 13px;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.9;
+}
+
+.result-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.result-keywords span {
+  padding: 4px 9px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--accent-soft) 48%, transparent);
+  color: var(--accent-deep);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.result-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 26px;
+  border-top: 1px solid rgba(201, 185, 157, 0.6);
+}
+
+.result-meta-grid > div {
+  padding: 13px 15px 0 0;
+}
+
+.result-meta-grid > div + div {
+  padding-left: 16px;
+  border-left: 1px solid rgba(201, 185, 157, 0.6);
+}
+
+.result-meta-grid span {
+  display: block;
+  color: var(--ink-muted);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.result-meta-grid strong {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.result-visual {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 410px;
+  justify-self: center;
+}
+
+.wealth-sigil {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.sigil-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sigil-lines .sigil-orbit {
+  transform-origin: 200px 200px;
+  animation: orbit-spin 70s linear infinite;
+}
+
+.sigil-lines .sigil-polygon {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 7;
+}
+
+.sigil-lines .sigil-ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--accent) 32%, transparent);
+  stroke-width: 1;
+}
+
+.sigil-lines .sigil-disc {
+  fill: rgba(251, 247, 238, 0.72);
+  stroke: rgba(201, 185, 157, 0.6);
+  stroke-width: 1;
+}
+
+.sigil-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgba(251, 247, 238, 0.96);
+  color: var(--ink-muted);
+  transform: translate(-50%, -50%);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.sigil-node .sigil-char {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.sigil-node .sigil-name {
+  margin-top: 2px;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  opacity: 0.78;
+}
+
+.sigil-node.is-secondary {
+  border: 2px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  box-shadow: 0 0 0 4px rgba(251, 247, 238, 0.7);
+}
+
+.sigil-node.is-primary {
+  z-index: 3;
+  width: 84px;
+  height: 84px;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff9ed;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 24%, transparent);
+  transform: translate(-50%, -50%) scale(1.03);
+}
+
+.sigil-node.is-primary .sigil-name {
+  opacity: 0.9;
+}
+
+.sigil-role {
+  position: absolute;
+  top: -6px;
+  right: -3px;
+  display: none;
+  min-width: 22px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper-light);
+  font-size: 8px;
+  line-height: 17px;
+  text-align: center;
+}
+
+.sigil-node.is-primary .sigil-role,
+.sigil-node.is-secondary .sigil-role {
+  display: block;
+}
+
+.sigil-node.is-secondary .sigil-role {
+  background: var(--accent);
+}
+
+.sigil-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  height: 130px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 50%;
+  background: rgba(251, 247, 238, 0.95);
+  color: var(--accent-deep);
+  text-align: center;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 16px 40px rgba(72, 52, 28, 0.09);
+}
+
+.sigil-center::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 50%;
+}
+
+.sigil-center span {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-serif);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.sigil-center small {
+  position: relative;
+  z-index: 1;
+  margin-top: 1px;
+  color: var(--ink-muted);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
+
+.sigil-caption {
+  margin-top: 9px;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 9px;
+  letter-spacing: 0.11em;
+  text-align: center;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.report-card {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(251, 247, 238, 0.82);
+  box-shadow: 0 14px 38px rgba(63, 46, 26, 0.045);
+}
+
+.energy-card {
+  padding: 27px 28px 25px;
+}
+
+.axis-card {
+  padding: 27px 28px 25px;
+}
+
+.report-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 23px;
+}
+
+.report-card-kicker {
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.report-card h2 {
+  margin-top: 5px;
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+.report-card-note {
+  flex: 0 0 auto;
+  color: var(--ink-muted);
+  font-size: 9.5px;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.element-bars {
+  display: grid;
+  gap: 13px;
+}
+
+.element-row {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr) 57px;
+  align-items: center;
+  gap: 11px;
+}
+
+.element-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.element-label .el-char {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 7px;
+  background: var(--el-soft);
+  color: var(--el);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.element-label .el-name {
+  overflow: hidden;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.element-track,
+.axis-track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(211, 199, 180, 0.42);
+}
+
+.element-fill {
+  display: block;
+  width: var(--w);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--el);
+  transform-origin: left center;
+  animation: bar-grow 0.8s 0.1s cubic-bezier(0.22, 0.7, 0.25, 1) both;
+}
+
+.element-value {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  color: var(--ink-soft);
+  font-family: var(--font-latin);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.element-value strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.element-value .role-pill {
+  display: inline-block;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: var(--font-sans);
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.el-primary .el-name {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.role-main {
+  background: var(--accent);
+  color: #fff8e9;
+}
+
+.role-second {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+.chart-note {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(201, 185, 157, 0.45);
+  color: var(--ink-muted);
+  font-size: 9.5px;
+  line-height: 1.75;
+}
+
+.axis-bars {
+  display: grid;
+  gap: 15px;
+}
+
+.axis-row {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 10px;
+}
+
+.axis-label {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.axis-label strong {
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.axis-label small {
+  margin-top: 2px;
+  color: var(--ink-muted);
+  font-size: 8.5px;
+}
+
+.axis-track {
+  height: 5px;
+}
+
+.axis-fill {
+  display: block;
+  width: var(--w);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  opacity: 0.82;
+  transform-origin: left center;
+  animation: bar-grow 0.8s 0.22s cubic-bezier(0.22, 0.7, 0.25, 1) both;
+}
+
+.axis-row:nth-child(2) .axis-fill {
+  opacity: 0.68;
+}
+
+.axis-row:nth-child(3) .axis-fill {
+  opacity: 0.54;
+}
+
+.axis-row:nth-child(4) .axis-fill {
+  opacity: 0.42;
+}
+
+.axis-score {
+  color: var(--ink-soft);
+  font-family: var(--font-latin);
+  font-size: 11px;
+  text-align: right;
+}
+
+.axis-score small {
+  color: var(--ink-muted);
+  font-size: 8px;
+}
+
+.axis-summary {
+  margin-top: 19px;
+  padding: 12px 13px;
+  border-left: 2px solid var(--accent);
+  border-radius: 0 9px 9px 0;
+  background: var(--accent-soft);
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+.axis-summary strong {
+  color: var(--accent-deep);
+  font-weight: 600;
+}
+
+/* 五行搭档 */
+
+.pair-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 30px;
+  margin-top: 16px;
+  padding: 31px 34px;
+  overflow: hidden;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 80% 0%, rgba(174, 136, 80, 0.18), transparent 35%),
+    var(--ink);
+  color: var(--paper-light);
+}
+
+.pair-banner::after {
+  content: "五行";
+  position: absolute;
+  right: 72px;
+  bottom: -31px;
+  color: rgba(255, 248, 235, 0.035);
+  font-family: var(--font-serif);
+  font-size: 110px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.pair-mark {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.pair-el {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 1px solid rgba(255, 249, 236, 0.2);
+  border-radius: 50%;
+  color: var(--el-color, #f8f1e3);
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pair-mark i {
+  color: rgba(246, 239, 226, 0.45);
+  font-family: var(--font-latin);
+  font-size: 14px;
+  font-style: normal;
+}
+
+.pair-copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.pair-kicker {
+  color: rgba(248, 242, 230, 0.5);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+}
+
+.pair-kicker span {
+  color: var(--gold-light);
+}
+
+.pair-copy h2 {
+  margin-top: 5px;
+  color: var(--paper-light);
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 2.1vw, 1.55rem);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.pair-text {
+  max-width: 63em;
+  margin-top: 7px;
+  color: rgba(248, 242, 230, 0.66);
+  font-size: 11.5px;
+  line-height: 1.8;
+}
+
+.pair-use {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(248, 242, 230, 0.13);
+  color: rgba(248, 242, 230, 0.72);
+  font-size: 10.5px;
+  line-height: 1.75;
+}
+
+.pair-use strong {
+  margin-right: 7px;
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
+.pair-stamp {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  min-height: 72px;
+  border: 1px solid rgba(214, 193, 158, 0.4);
+  border-radius: 4px;
+  color: rgba(226, 204, 168, 0.8);
+  font-family: var(--font-serif);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  line-height: 1.5;
+  writing-mode: vertical-rl;
+}
+
+/* 结果正文 */
+
+.result-section {
+  display: grid;
+  grid-template-columns: 258px minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 82px);
+  padding-top: 78px;
+}
+
+.section-rail {
+  min-width: 0;
+}
+
+.rail-index {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+}
+
+.rail-index::before {
+  content: "";
+  width: 19px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.section-rail h2 {
+  margin-top: 14px;
+  font-family: var(--font-serif);
+  font-size: clamp(1.85rem, 2.9vw, 2.55rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.35;
+}
+
+.rail-note {
+  max-width: 19em;
+  margin-top: 15px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.section-content {
+  min-width: 0;
+}
+
+.lead-copy {
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 2;
+}
+
+.lead-copy::first-letter {
+  float: left;
+  margin: 0.12em 0.14em 0 0;
+  color: var(--accent-deep);
+  font-family: var(--font-serif);
+  font-size: 3.1em;
+  font-weight: 700;
+  line-height: 0.85;
+}
+
+.profile-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.insight-panel {
+  padding: 21px 21px 18px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: rgba(251, 247, 238, 0.74);
+}
+
+.insight-panel--leak {
+  border-color: #decdb6;
+  background: rgba(238, 228, 212, 0.68);
+}
+
+.insight-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.panel-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.insight-panel--leak .panel-dot {
+  background: var(--red);
+}
+
+.insight-panel h3 {
+  margin-top: 7px;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.insight-panel ul {
+  display: grid;
+  gap: 9px;
+  margin-top: 13px;
+}
+
+.insight-panel li {
+  position: relative;
+  padding-left: 13px;
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  line-height: 1.75;
+}
+
+.insight-panel li::before {
+  content: "";
+  position: absolute;
+  top: 0.7em;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.insight-panel--leak li::before {
+  background: var(--red);
+}
+
+.element-note {
+  position: relative;
+  margin-top: 14px;
+  padding: 17px 20px 17px 21px;
+  overflow: hidden;
+  border-left: 2px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  background: var(--accent-soft);
+}
+
+.element-note p {
+  position: relative;
+  z-index: 1;
+  color: var(--accent-deep);
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.element-note::after {
+  content: attr(data-char);
+  position: absolute;
+  right: 14px;
+  bottom: -12px;
+  color: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-family: var(--font-serif);
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.partner-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 19px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.partner-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--accent-deep);
+}
+
+.partner-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.partner-note strong {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.partner-note p {
+  margin-top: 3px;
+  color: var(--ink-muted);
+  font-size: 11.5px;
+  line-height: 1.8;
+}
+
+/* 财路 */
+
+.path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--ink);
+}
+
+.path-card {
+  position: relative;
+  min-height: 188px;
+  padding: 22px 22px 18px 0;
+}
+
+.path-card + .path-card {
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+}
+
+.path-no {
+  color: var(--accent-deep);
+  font-family: var(--font-latin);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+}
+
+.path-card h3 {
+  margin-top: 16px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.path-card p {
+  margin-top: 9px;
+  color: var(--ink-muted);
+  font-size: 11.5px;
+  line-height: 1.85;
+}
+
+.path-card::after {
+  content: "";
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  width: 23px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.7;
+}
+
+.path-card + .path-card::after {
+  left: 22px;
+}
+
+.path-disclaimer {
+  margin-top: 13px;
+  color: var(--ink-muted);
+  font-size: 9.5px;
+  line-height: 1.8;
+}
+
+/* 行动清单 */
+
+.action-panel {
+  position: relative;
+  margin-top: 82px;
+  padding: clamp(28px, 4.7vw, 49px);
+  overflow: hidden;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 94% -6%, rgba(174, 136, 80, 0.24), transparent 34%),
+    var(--ink);
+  color: var(--paper-light);
+}
+
+.action-panel::after {
+  content: "行";
+  position: absolute;
+  right: 3%;
+  bottom: -23%;
+  color: rgba(255, 248, 235, 0.04);
+  font-family: var(--font-serif);
+  font-size: clamp(200px, 27vw, 360px);
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.action-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.action-head > div {
+  max-width: 660px;
+}
+
+.action-head .rail-index {
+  color: rgba(247, 241, 228, 0.45);
+}
+
+.action-head .rail-index::before {
+  background: var(--gold-light);
+}
+
+.action-head h2 {
+  margin-top: 12px;
+  color: var(--paper-light);
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 3.2vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+
+.action-head p {
+  max-width: 32em;
+  margin-top: 9px;
+  color: rgba(247, 241, 228, 0.58);
+  font-size: 12px;
+  line-height: 1.85;
+}
+
+.action-head-note {
+  flex: 0 0 auto;
+  padding-bottom: 4px;
+  color: rgba(247, 241, 228, 0.35);
+  font-family: var(--font-latin);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-align: right;
+}
+
+.action-list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 31px;
+}
+
+.action-item {
+  padding-top: 19px;
+  border-top: 1px solid rgba(222, 208, 183, 0.26);
+}
+
+.action-tag {
+  color: var(--gold-light);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+}
+
+.action-item h3 {
+  margin-top: 8px;
+  color: var(--paper-light);
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.action-item p {
+  margin-top: 8px;
+  color: rgba(247, 241, 228, 0.62);
+  font-size: 11px;
+  line-height: 1.85;
+}
+
+.action-footnote {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 29px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(222, 208, 183, 0.18);
+  color: rgba(247, 241, 228, 0.45);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.action-footnote svg {
+  width: 14px;
+  height: 14px;
+  color: var(--gold-light);
+}
+
+/* 依据与规则 */
+
+.evidence-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  gap: 16px;
+  margin-top: 77px;
+}
+
+.evidence-card,
+.rules-card {
+  padding: 26px 27px 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(251, 247, 238, 0.7);
+}
+
+.evidence-card .report-card-kicker,
+.rules-card .report-card-kicker {
+  color: var(--accent-deep);
+}
+
+.evidence-card h2,
+.rules-card h2 {
+  margin-top: 5px;
+  font-family: var(--font-serif);
+  font-size: 1.32rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.evidence-copy {
+  margin-top: 10px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.key-choices {
+  display: grid;
+  gap: 0;
+  margin-top: 17px;
+  border-top: 1px solid var(--line);
+}
+
+.key-choice {
+  display: grid;
+  grid-template-columns: 23px 98px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 7px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(201, 185, 157, 0.4);
+}
+
+.key-choice-no {
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 9px;
+}
+
+.key-choice-label {
+  color: var(--ink-muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.key-choice-value {
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.65;
+}
+
+.local-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 15px;
+  color: var(--ink-muted);
+  font-size: 9.5px;
+  line-height: 1.7;
+}
+
+.local-note svg {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.rules-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.rules-card > details {
+  margin-top: 17px;
+  border-top: 1px solid var(--line);
+}
+
+.rules-card summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+  cursor: pointer;
+  list-style: none;
+}
+
+.rules-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.rules-card summary::after {
+  content: "+";
+  flex: 0 0 auto;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 17px;
+  font-weight: 400;
+  transition: transform 0.2s ease;
+}
+
+.rules-card details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.rules-body {
+  padding-bottom: 6px;
+  color: var(--ink-muted);
+  font-size: 10px;
+  line-height: 1.85;
+}
+
+.rules-body p + p {
+  margin-top: 8px;
+}
+
+.rule-formula {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0 12px;
+}
+
+.rule-formula span {
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper-light);
+  color: var(--ink-soft);
+  font-size: 9px;
+}
+
+.result-ending {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 71px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.result-ending-copy {
+  max-width: 525px;
+}
+
+.result-ending h2 {
+  margin-top: 7px;
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 2.8vw, 2.3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+}
+
+.result-ending p {
+  margin-top: 9px;
+  color: var(--ink-muted);
+  font-size: 11.5px;
+  line-height: 1.8;
+}
+
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  flex: 0 0 auto;
+}
+
+.result-actions .btn {
+  min-height: 47px;
+  font-size: 12px;
+}
+
+.result-actions .btn-text {
+  min-height: 42px;
+  padding: 0 5px;
+}
+
+.result-footer {
+  margin-top: 62px;
+  padding: 24px 0 30px;
+  border-top: 1px solid rgba(201, 185, 157, 0.5);
+}
+
+.result-footer p {
+  max-width: 900px;
+  color: var(--ink-muted);
+  font-size: 9.5px;
+  line-height: 1.85;
+}
+
+.result-footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  margin-top: 13px;
+  color: var(--ink-muted);
+  font-family: var(--font-latin);
+  font-size: 8.5px;
+  letter-spacing: 0.07em;
+}
+
+/* ---------- 弹窗和轻提示 ---------- */
+
+.confirm-dialog {
+  width: min(calc(100% - 32px), 435px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--paper-light);
+  color: var(--ink);
+  box-shadow: 0 30px 90px rgba(29, 43, 35, 0.3);
+}
+
+.confirm-dialog::backdrop {
+  background: rgba(24, 34, 28, 0.45);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-inner {
+  position: relative;
+  padding: 31px 29px 27px;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-muted);
+}
+
+.dialog-close:hover {
+  background: var(--paper-deep);
+  color: var(--ink);
+}
+
+.dialog-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dialog-seal {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(180, 73, 53, 0.3);
+  border-radius: 7px;
+  color: var(--red);
+  font-family: var(--font-serif);
+  font-size: 17px;
+}
+
+.dialog-inner h2 {
+  margin-top: 17px;
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.dialog-inner > p {
+  margin-top: 9px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: 1.85;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.dialog-actions .btn {
+  min-height: 43px;
+  padding-inline: 17px;
+  font-size: 11.5px;
+}
+
+.btn-danger {
+  background: var(--red);
+  color: var(--paper-light);
+}
+
+.btn-danger:hover {
+  background: var(--red-dark);
+}
+
+.toast {
+  position: fixed;
+  right: 50%;
+  bottom: max(22px, env(safe-area-inset-bottom));
+  z-index: 120;
+  max-width: calc(100% - 32px);
+  padding: 10px 17px;
+  border: 1px solid rgba(255, 248, 235, 0.18);
+  border-radius: 999px;
+  background: rgba(29, 43, 35, 0.95);
+  color: var(--paper-light);
+  font-size: 11.5px;
+  line-height: 1.6;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(50%, 10px);
+  transition:
+    opacity 0.24s ease,
+    transform 0.24s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(50%, 0);
+}
+
+/* ---------- 动画 ---------- */
+
+@keyframes view-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(17px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes art-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes result-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes question-in {
+  from {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-pulse {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  55% {
+    transform: translateX(4px);
+  }
+  78% {
+    transform: translateX(-2px);
+  }
+}
+
+/* ---------- 响应式 ---------- */
+
+@media (max-width: 1100px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(350px, 0.95fr);
+    min-height: 650px;
+  }
+
+  .types-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .type-card {
+    min-height: 322px;
+    padding-inline: 16px;
+  }
+
+  .type-card h3 {
+    gap: 5px;
+    font-size: 1.32rem;
+  }
+
+  .type-card h3 .type-char {
+    font-size: 1.68rem;
+  }
+
+  .type-card p {
+    font-size: 11.5px;
+  }
+
+  .type-tags {
+    font-size: 9.2px;
+  }
+
+  .result-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .home-nav {
+    gap: 18px;
+  }
+
+  .home-nav .nav-link {
+    display: none;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 10px;
+    padding-top: 52px;
+    padding-bottom: 9px;
+  }
+
+  .hero-copy {
+    max-width: 640px;
+  }
+
+  .hero-title {
+    max-width: 8em;
+    font-size: clamp(3.9rem, 11vw, 6.1rem);
+  }
+
+  .hero-visual {
+    width: min(100%, 520px);
+    margin: 4px auto 0;
+    justify-self: center;
+  }
+
+  .visual-frame {
+    inset: 7% 1% 11%;
+  }
+
+  .vertical-mark {
+    display: none;
+  }
+
+  .manifesto {
+    margin-top: 16px;
+  }
+
+  .section {
+    padding-top: 80px;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 19px;
+    margin-bottom: 28px;
+  }
+
+  .section-side {
+    max-width: 540px;
+    padding-bottom: 0;
+  }
+
+  .types-grid {
+    display: flex;
+    gap: 11px;
+    width: calc(100% + var(--gutter));
+    margin-right: calc(var(--gutter) * -1);
+    padding-right: var(--gutter);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .types-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .type-card {
+    flex: 0 0 min(39vw, 255px);
+    min-height: 305px;
+    scroll-snap-align: start;
+  }
+
+  .swipe-hint {
+    display: flex;
+  }
+
+  .quote-block {
+    margin-top: 80px;
+  }
+
+  .method-panel {
+    margin-top: 80px;
+  }
+
+  .method-inner {
+    grid-template-columns: 1fr;
+    gap: 38px;
+    padding-top: 64px;
+    padding-bottom: 45px;
+  }
+
+  .method-intro > p,
+  .method-note {
+    max-width: 570px;
+  }
+
+  .method-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 22px;
+  }
+
+  .method-bottom .btn {
+    width: 100%;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-item {
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .about-item + .about-item {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .about-measure {
+    padding-top: 63px;
+  }
+
+  .about-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .footer-main {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .result-main {
+    padding-top: 21px;
+  }
+
+  .result-hero {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    min-height: 0;
+    padding: 33px;
+  }
+
+  .result-visual {
+    width: min(100%, 385px);
+    margin: 0 auto;
+  }
+
+  .result-meta-grid {
+    margin-top: 22px;
+  }
+
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pair-banner {
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 21px;
+    padding: 27px;
+  }
+
+  .pair-stamp {
+    display: none;
+  }
+
+  .pair-el {
+    width: 47px;
+    height: 47px;
+    font-size: 19px;
+  }
+
+  .result-section {
+    grid-template-columns: 1fr;
+    gap: 23px;
+    padding-top: 59px;
+  }
+
+  .section-rail {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 6px 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rail-index {
+    grid-column: 1 / -1;
+  }
+
+  .section-rail h2 {
+    margin-top: 7px;
+  }
+
+  .rail-note {
+    max-width: 270px;
+    margin-top: 0;
+    padding-bottom: 5px;
+    text-align: right;
+  }
+
+  .path-card {
+    min-height: 165px;
+  }
+
+  .action-panel {
+    margin-top: 62px;
+  }
+
+  .action-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .action-head-note {
+    padding-bottom: 0;
+    text-align: left;
+  }
+
+  .action-list {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 24px;
+  }
+
+  .action-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 1.25fr;
+    gap: 20px;
+    padding: 17px 0;
+  }
+
+  .action-item h3 {
+    margin-top: 5px;
+  }
+
+  .action-item p {
+    margin-top: 0;
+    padding-top: 25px;
+  }
+
+  .evidence-grid {
+    grid-template-columns: 1fr;
+    margin-top: 58px;
+  }
+
+  .result-ending {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 52px;
+  }
+
+  .result-actions {
+    justify-content: flex-start;
+  }
+
+  .result-footer {
+    margin-top: 43px;
+  }
+}
+
+@media (max-width: 680px) {
+  :root {
+    --gutter: 18px;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  .home-header {
+    padding-top: 18px;
+  }
+
+  .home-header .wrap {
+    gap: 10px;
+  }
+
+  .brand {
+    gap: 9px;
+  }
+
+  .brand-seal {
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
+    font-size: 20px;
+  }
+
+  .brand-text strong {
+    font-size: 16px;
+  }
+
+  .brand-text small {
+    font-size: 7px;
+  }
+
+  .home-header .btn {
+    min-height: 37px;
+    margin-left: auto;
+    padding-inline: 14px;
+    font-size: 11.5px;
+  }
+
+  .home-header .btn svg {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 48px;
+  }
+
+  .hero-title {
+    margin-top: 17px;
+    margin-bottom: 20px;
+    font-size: clamp(3.35rem, 16.2vw, 4.9rem);
+    letter-spacing: -0.045em;
+  }
+
+  .hero-lead {
+    font-size: 14.5px;
+    line-height: 1.85;
+  }
+
+  .hero-sub {
+    margin-top: 10px;
+    font-size: 12.5px;
+    line-height: 1.8;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 23px;
+  }
+
+  .hero-actions .btn-primary {
+    width: 100%;
+    min-height: 52px;
+    padding-inline: 18px;
+  }
+
+  .hero-actions .btn-text {
+    align-self: flex-start;
+    min-height: 37px;
+    font-size: 12px;
+  }
+
+  .hero-meta {
+    margin-top: 22px;
+    font-size: 10.5px;
+  }
+
+  .hero-meta span + span::before {
+    margin: 0 9px;
+  }
+
+  .hero-meta b {
+    font-size: 15px;
+  }
+
+  .resume-strip {
+    align-items: flex-start;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .resume-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  .resume-copy p {
+    font-size: 10.5px;
+  }
+
+  .resume-actions {
+    flex-direction: column;
+    gap: 1px;
+    align-items: flex-end;
+  }
+
+  .resume-continue {
+    min-height: 29px;
+    padding-inline: 10px;
+    font-size: 10.5px;
+  }
+
+  .resume-reset {
+    min-height: 24px;
+    font-size: 9.5px;
+  }
+
+  .hero-visual {
+    width: min(100%, 430px);
+    margin-top: 8px;
+  }
+
+  .art-caption {
+    margin-top: -4px;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .art-caption::before,
+  .art-caption::after {
+    width: 18px;
+  }
+
+  .manifesto .wrap {
+    gap: 9px 15px;
+    padding: 15px 0;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .section {
+    padding-top: 61px;
+  }
+
+  .section-heading h2 {
+    margin-top: 11px;
+    font-size: clamp(2.05rem, 9vw, 2.8rem);
+  }
+
+  .section-side {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .types-grid {
+    width: calc(100% + var(--gutter));
+    margin-right: calc(var(--gutter) * -1);
+    padding-right: var(--gutter);
+  }
+
+  .type-card {
+    flex-basis: min(71vw, 270px);
+    min-height: 292px;
+    padding: 21px 18px 18px;
+  }
+
+  .type-card h3 {
+    margin-top: 23px;
+    font-size: 1.4rem;
+  }
+
+  .type-card h3 .type-char {
+    font-size: 1.75rem;
+  }
+
+  .type-card p {
+    font-size: 12px;
+  }
+
+  .types-footnote {
+    align-items: flex-start;
+    margin-top: 16px;
+    font-size: 10px;
+  }
+
+  .quote-block {
+    margin-top: 63px;
+    padding-inline: 14px;
+  }
+
+  .quote-block::before {
+    top: -28px;
+    font-size: 58px;
+  }
+
+  .quote-block blockquote {
+    font-size: clamp(1.42rem, 6.4vw, 1.8rem);
+    line-height: 1.65;
+  }
+
+  .quote-block figcaption {
+    margin-top: 13px;
+    font-size: 8.5px;
+  }
+
+  .method-panel {
+    margin-top: 63px;
+  }
+
+  .method-inner {
+    gap: 30px;
+    padding-top: 50px;
+    padding-bottom: 31px;
+  }
+
+  .method-intro h2 {
+    margin-top: 13px;
+    font-size: clamp(2.2rem, 10vw, 2.9rem);
+  }
+
+  .method-intro > p {
+    margin-top: 16px;
+    font-size: 12.5px;
+  }
+
+  .method-note {
+    margin-top: 22px;
+    padding: 12px;
+  }
+
+  .method-note p {
+    font-size: 10.5px;
+  }
+
+  .method-step {
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    padding: 20px 0;
+  }
+
+  .method-step h3 {
+    font-size: 1.2rem;
+  }
+
+  .method-step p {
+    margin-top: 6px;
+    font-size: 11.5px;
+  }
+
+  .formula span {
+    font-size: 9px;
+  }
+
+  .method-bottom {
+    gap: 17px;
+    padding: 19px 0 24px;
+  }
+
+  .mini-el {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .about-measure {
+    padding-top: 50px;
+  }
+
+  .about-heading h2 {
+    font-size: 1.8rem;
+  }
+
+  .about-heading > p {
+    font-size: 10.5px;
+  }
+
+  .about-item {
+    padding: 18px 0;
+  }
+
+  .about-item h3 {
+    margin-top: 7px;
+    font-size: 1.05rem;
+  }
+
+  .about-item p {
+    margin-top: 5px;
+    font-size: 11px;
+  }
+
+  .home-footer {
+    margin-top: 52px;
+  }
+
+  .footer-main {
+    gap: 19px;
+    padding: 29px 0 22px;
+  }
+
+  .footer-disclaimer {
+    font-size: 10px;
+  }
+
+  .footer-bottom {
+    padding: 13px 0 21px;
+    font-size: 8.5px;
+    letter-spacing: 0.03em;
+  }
+
+  /* 答题移动端 */
+  .quiz-header-inner {
+    min-height: 58px;
+    gap: 9px;
+  }
+
+  .quiz-header .brand-text small {
+    display: none;
+  }
+
+  .quiz-header-title,
+  .quiz-header-divider {
+    display: none;
+  }
+
+  .quiz-header .brand-seal {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .quiz-header .brand-text strong {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+  }
+
+  .quiz-exit {
+    min-height: 34px;
+    padding: 0 11px;
+    font-size: 10px;
+  }
+
+  .quiz-main {
+    padding-top: 23px;
+    padding-bottom: 38px;
+  }
+
+  .quiz-progress {
+    margin-bottom: 14px;
+  }
+
+  .progress-top {
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 9px;
+  }
+
+  .quiz-act {
+    font-size: 9.5px;
+  }
+
+  .quiz-counter {
+    margin-top: 2px;
+    font-size: 13px;
+  }
+
+  .progress-meta {
+    font-size: 9px;
+  }
+
+  .progress-saved {
+    font-size: 9px;
+  }
+
+  .review-bar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 11px;
+    padding: 9px 10px;
+    font-size: 10px;
+  }
+
+  .review-finish {
+    align-self: flex-end;
+    min-height: 31px;
+    font-size: 10px;
+  }
+
+  .answer-map {
+    gap: 4px;
+    margin-top: 9px;
+  }
+
+  .map-btn {
+    width: 27px;
+    height: 27px;
+    border-radius: 6px;
+    font-size: 9px;
+  }
+
+  .quiz-card {
+    padding: 26px 18px 18px;
+    border-radius: 20px;
+  }
+
+  .quiz-card::before {
+    top: 27px;
+    height: 33px;
+  }
+
+  .quiz-card::after {
+    right: 18px;
+    bottom: 11px;
+    font-size: 63px;
+  }
+
+  .question-kicker {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .question-title {
+    margin-top: 13px;
+    margin-bottom: 8px;
+    font-size: clamp(1.44rem, 6.7vw, 1.85rem);
+    line-height: 1.48;
+  }
+
+  .question-help {
+    margin-bottom: 19px;
+    font-size: 10px;
+  }
+
+  .options {
+    gap: 9px;
+  }
+
+  .option {
+    grid-template-columns: 29px minmax(0, 1fr) 19px;
+    gap: 10px;
+    min-height: 58px;
+    padding: 11px 12px;
+    border-radius: 11px;
+  }
+
+  .option-letter {
+    width: 27px;
+    height: 27px;
+    font-size: 10px;
+  }
+
+  .option-text {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .option-check {
+    width: 19px;
+    height: 19px;
+  }
+
+  .answer-hint {
+    margin-top: 11px;
+    padding: 8px 10px;
+    font-size: 10.5px;
+  }
+
+  .quiz-controls {
+    gap: 9px;
+    margin-top: 19px;
+    padding-top: 16px;
+  }
+
+  .btn-back {
+    min-height: 45px;
+    padding: 0 8px 0 3px;
+    font-size: 10.5px;
+  }
+
+  .btn-back svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .control-note {
+    display: none;
+  }
+
+  .btn-next {
+    min-width: 0;
+    min-height: 45px;
+    flex: 1;
+    padding-inline: 13px;
+    font-size: 11.5px;
+  }
+
+  .quiz-footnote {
+    margin-top: 15px;
+    font-size: 9px;
+  }
+
+  /* 结果移动端 */
+  .result-header {
+    padding-top: 18px;
+  }
+
+  .result-header .brand-seal {
+    width: 32px;
+    height: 32px;
+    font-size: 17px;
+  }
+
+  .result-header .brand-text strong {
+    font-size: 14px;
+  }
+
+  .result-header .brand-text small {
+    display: none;
+  }
+
+  .result-header-note {
+    display: none;
+  }
+
+  .result-home-link {
+    min-height: 33px;
+    padding-inline: 11px;
+    font-size: 10px;
+  }
+
+  .result-main {
+    padding-top: 17px;
+  }
+
+  .result-hero {
+    gap: 22px;
+    padding: 25px 20px 23px;
+    border-radius: 21px;
+  }
+
+  .result-hero::before {
+    top: -130px;
+    right: -170px;
+    width: 420px;
+    height: 420px;
+  }
+
+  .result-kicker {
+    font-size: 8.5px;
+  }
+
+  .result-kicker::before {
+    width: 16px;
+  }
+
+  .small-pill {
+    padding: 1px 5px;
+    font-size: 7px;
+  }
+
+  .result-name-row {
+    gap: 11px;
+    margin-top: 20px;
+  }
+
+  .result-seal {
+    width: 49px;
+    height: 49px;
+    border-radius: 8px;
+    font-size: 27px;
+  }
+
+  .result-element-label {
+    font-size: 8.5px;
+  }
+
+  .result-name-row h1 {
+    font-size: clamp(2.2rem, 11.5vw, 3rem);
+  }
+
+  .result-motto {
+    margin-top: 15px;
+    font-size: 1.07rem;
+    line-height: 1.6;
+  }
+
+  .result-summary {
+    margin-top: 9px;
+    font-size: 11.5px;
+    line-height: 1.85;
+  }
+
+  .result-keywords {
+    margin-top: 13px;
+  }
+
+  .result-keywords span {
+    padding: 3px 7px;
+    font-size: 9px;
+  }
+
+  .result-meta-grid {
+    margin-top: 19px;
+  }
+
+  .result-meta-grid > div {
+    padding: 10px 8px 0 0;
+  }
+
+  .result-meta-grid > div + div {
+    padding-left: 9px;
+  }
+
+  .result-meta-grid span {
+    font-size: 8px;
+  }
+
+  .result-meta-grid strong {
+    margin-top: 2px;
+    font-size: 11.5px;
+  }
+
+  .result-visual {
+    width: min(100%, 330px);
+  }
+
+  .sigil-node {
+    width: 57px;
+    height: 57px;
+  }
+
+  .sigil-node .sigil-char {
+    font-size: 18px;
+  }
+
+  .sigil-node .sigil-name {
+    font-size: 6.5px;
+  }
+
+  .sigil-node.is-primary {
+    width: 68px;
+    height: 68px;
+  }
+
+  .sigil-node.is-primary .sigil-char {
+    font-size: 22px;
+  }
+
+  .sigil-role {
+    top: -5px;
+    right: -4px;
+    min-width: 19px;
+    height: 15px;
+    padding: 0 4px;
+    font-size: 7px;
+    line-height: 15px;
+  }
+
+  .sigil-center {
+    width: 101px;
+    height: 101px;
+  }
+
+  .sigil-center span {
+    font-size: 31px;
+  }
+
+  .sigil-center small {
+    font-size: 6.5px;
+  }
+
+  .sigil-caption {
+    margin-top: 2px;
+    font-size: 7.5px;
+  }
+
+  .report-grid {
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .energy-card,
+  .axis-card {
+    padding: 21px 17px 19px;
+    border-radius: 18px;
+  }
+
+  .report-card-head {
+    margin-bottom: 18px;
+  }
+
+  .report-card h2 {
+    font-size: 1.22rem;
+  }
+
+  .report-card-note {
+    font-size: 8px;
+  }
+
+  .element-row {
+    grid-template-columns: 80px minmax(0, 1fr) 50px;
+    gap: 8px;
+  }
+
+  .element-label {
+    gap: 6px;
+  }
+
+  .element-label .el-char {
+    width: 23px;
+    height: 23px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+
+  .element-label .el-name {
+    font-size: 9.5px;
+  }
+
+  .element-value {
+    gap: 3px;
+    font-size: 9.5px;
+  }
+
+  .element-value .role-pill {
+    padding: 0 3px;
+    font-size: 7px;
+  }
+
+  .element-bars {
+    gap: 10px;
+  }
+
+  .chart-note {
+    margin-top: 14px;
+    padding-top: 11px;
+    font-size: 8.5px;
+  }
+
+  .axis-bars {
+    gap: 12px;
+  }
+
+  .axis-row {
+    grid-template-columns: 74px minmax(0, 1fr) 32px;
+    gap: 7px;
+  }
+
+  .axis-label strong {
+    font-size: 12px;
+  }
+
+  .axis-label small {
+    font-size: 7.5px;
+  }
+
+  .axis-score {
+    font-size: 9.5px;
+  }
+
+  .axis-summary {
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 9px;
+  }
+
+  .pair-banner {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+
+  .pair-mark {
+    justify-content: flex-start;
+  }
+
+  .pair-el {
+    width: 41px;
+    height: 41px;
+    font-size: 17px;
+  }
+
+  .pair-kicker {
+    font-size: 8px;
+  }
+
+  .pair-copy h2 {
+    font-size: 1.08rem;
+  }
+
+  .pair-text {
+    font-size: 10.5px;
+  }
+
+  .pair-use {
+    font-size: 9.5px;
+  }
+
+  .result-section {
+    gap: 18px;
+    padding-top: 48px;
+  }
+
+  .section-rail {
+    display: block;
+    padding-bottom: 12px;
+  }
+
+  .section-rail h2 {
+    margin-top: 7px;
+    font-size: 1.75rem;
+  }
+
+  .rail-note {
+    margin-top: 8px;
+    padding-bottom: 0;
+    font-size: 10px;
+    text-align: left;
+  }
+
+  .lead-copy {
+    font-size: 13.5px;
+    line-height: 1.95;
+  }
+
+  .lead-copy::first-letter {
+    font-size: 2.75em;
+  }
+
+  .profile-panels {
+    grid-template-columns: 1fr;
+    gap: 9px;
+    margin-top: 21px;
+  }
+
+  .insight-panel {
+    padding: 17px 16px 15px;
+  }
+
+  .insight-panel h3 {
+    font-size: 1rem;
+  }
+
+  .insight-panel li {
+    font-size: 10.5px;
+  }
+
+  .element-note {
+    margin-top: 10px;
+    padding: 14px 15px;
+  }
+
+  .element-note p {
+    font-size: 11px;
+  }
+
+  .partner-note {
+    margin-top: 14px;
+    padding-top: 14px;
+  }
+
+  .partner-note p {
+    font-size: 10.5px;
+  }
+
+  .path-grid {
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--ink);
+  }
+
+  .path-card {
+    min-height: 0;
+    padding: 16px 0 20px;
+  }
+
+  .path-card + .path-card {
+    padding-left: 0;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .path-card h3 {
+    margin-top: 6px;
+    font-size: 1.08rem;
+  }
+
+  .path-card p {
+    margin-top: 5px;
+    font-size: 10.5px;
+  }
+
+  .path-card::after,
+  .path-card + .path-card::after {
+    display: none;
+  }
+
+  .path-disclaimer {
+    font-size: 8.5px;
+  }
+
+  .action-panel {
+    margin-top: 48px;
+    padding: 25px 18px 22px;
+    border-radius: 20px;
+  }
+
+  .action-head h2 {
+    font-size: 1.75rem;
+  }
+
+  .action-head p {
+    font-size: 10.5px;
+  }
+
+  .action-head-note {
+    display: none;
+  }
+
+  .action-list {
+    margin-top: 18px;
+  }
+
+  .action-item {
+    display: block;
+    padding: 14px 0;
+  }
+
+  .action-tag {
+    font-size: 8.5px;
+  }
+
+  .action-item h3 {
+    margin-top: 4px;
+    font-size: 1.04rem;
+  }
+
+  .action-item p {
+    margin-top: 5px;
+    padding-top: 0;
+    font-size: 10.5px;
+    line-height: 1.8;
+  }
+
+  .action-footnote {
+    align-items: flex-start;
+    margin-top: 16px;
+    padding-top: 13px;
+    font-size: 9px;
+  }
+
+  .evidence-grid {
+    gap: 11px;
+    margin-top: 45px;
+  }
+
+  .evidence-card,
+  .rules-card {
+    padding: 20px 17px 17px;
+    border-radius: 17px;
+  }
+
+  .evidence-card h2,
+  .rules-card h2 {
+    font-size: 1.16rem;
+  }
+
+  .key-choice {
+    grid-template-columns: 19px 86px minmax(0, 1fr);
+    gap: 5px;
+    padding: 9px 0;
+  }
+
+  .key-choice-label {
+    font-size: 9px;
+  }
+
+  .key-choice-value {
+    font-size: 10.5px;
+  }
+
+  .local-note {
+    font-size: 8.5px;
+  }
+
+  .rules-card summary {
+    font-size: 10px;
+  }
+
+  .rules-body {
+    font-size: 9.5px;
+  }
+
+  .result-ending {
+    gap: 17px;
+    margin-top: 42px;
+    padding-top: 23px;
+  }
+
+  .result-ending h2 {
+    font-size: 1.62rem;
+  }
+
+  .result-ending p {
+    font-size: 10.5px;
+  }
+
+  .result-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 7px;
+  }
+
+  .result-actions .btn-primary,
+  .result-actions .btn-ghost {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .result-actions .btn-text {
+    align-self: center;
+  }
+
+  .result-footer {
+    margin-top: 34px;
+    padding-top: 18px;
+  }
+
+  .result-footer p {
+    font-size: 8.5px;
+  }
+
+  .result-footer-meta {
+    font-size: 8px;
+  }
+
+  .dialog-inner {
+    padding: 24px 20px 20px;
+  }
+
+  .dialog-inner h2 {
+    margin-top: 14px;
+    font-size: 1.45rem;
+  }
+
+  .dialog-actions {
+    flex-direction: column-reverse;
+    gap: 7px;
+    margin-top: 19px;
+  }
+
+  .dialog-actions .btn {
+    width: 100%;
+  }
+
+  .toast {
+    bottom: max(16px, env(safe-area-inset-bottom));
+    font-size: 10.5px;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero-title {
+    font-size: 3.25rem;
+  }
+
+  .hero-meta {
+    gap: 6px 0;
+  }
+
+  .hero-meta span + span::before {
+    margin: 0 7px;
+  }
+
+  .type-card {
+    flex-basis: 78vw;
+  }
+
+  .option {
+    grid-template-columns: 27px minmax(0, 1fr) 18px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .option-text {
+    font-size: 12.5px;
+  }
+
+  .map-btn {
+    width: 25px;
+    height: 25px;
+  }
+
+  .result-name-row h1 {
+    font-size: 2.15rem;
+  }
+
+  .result-seal {
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+  }
+
+  .result-motto {
+    font-size: 1rem;
+  }
+
+  .report-card-note {
+    display: none;
+  }
+
+  .element-row {
+    grid-template-columns: 74px minmax(0, 1fr) 46px;
+  }
+
+  .element-value .role-pill {
+    display: none;
+  }
+
+  .element-label .el-name {
+    font-size: 9px;
+  }
+
+  .axis-row {
+    grid-template-columns: 67px minmax(0, 1fr) 30px;
+  }
+
+  .action-panel {
+    padding-inline: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- 可读性与窄屏精修 ---------- */
+.sigil-node:not(.is-primary):not(.is-secondary) {
+  opacity: 0.5;
+}
+
+.element-label .el-name {
+  font-size: 11.5px;
+}
+
+.chart-note {
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+.axis-label small {
+  font-size: 9px;
+}
+
+.axis-summary {
+  font-size: 11px;
+  line-height: 1.85;
+}
+
+.pair-text {
+  font-size: 12px;
+  line-height: 1.85;
+}
+
+.pair-use {
+  font-size: 11.5px;
+}
+
+.insight-panel li {
+  font-size: 12px;
+}
+
+.partner-note p {
+  font-size: 12px;
+}
+
+.path-card p {
+  font-size: 12px;
+}
+
+.path-disclaimer {
+  font-size: 10px;
+}
+
+.action-tag {
+  font-size: 9.5px;
+}
+
+.action-item p {
+  font-size: 12px;
+}
+
+.action-footnote {
+  font-size: 10.5px;
+}
+
+.evidence-copy {
+  font-size: 12px;
+}
+
+.key-choice-label {
+  font-size: 10.5px;
+}
+
+.key-choice-value {
+  font-size: 12px;
+}
+
+.local-note {
+  font-size: 10px;
+}
+
+.rules-intro {
+  margin-top: 14px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: 1.85;
+}
+
+.rules-card summary {
+  font-size: 12px;
+}
+
+.rules-body {
+  font-size: 11.5px;
+  line-height: 1.9;
+}
+
+.result-summary {
+  font-size: 14px;
+}
+
+.result-ending p {
+  font-size: 12.5px;
+}
+
+.result-footer p {
+  font-size: 10px;
+}
+
+@media (max-width: 1150px) {
+  .vertical-mark {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .option-text {
+    font-size: 14px;
+  }
+
+  .question-help {
+    font-size: 11px;
+  }
+
+  .review-bar {
+    font-size: 11px;
+  }
+
+  .map-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 10px;
+  }
+
+  .answer-hint {
+    font-size: 11.5px;
+  }
+
+  .quiz-footnote {
+    font-size: 10px;
+  }
+
+  .result-summary {
+    font-size: 13px;
+  }
+
+  .result-keywords span {
+    font-size: 10px;
+  }
+
+  .result-meta-grid span {
+    font-size: 9px;
+  }
+
+  .result-meta-grid strong {
+    font-size: 12.5px;
+  }
+
+  .sigil-node .sigil-name {
+    font-size: 8px;
+  }
+
+  .sigil-center small {
+    font-size: 7.5px;
+  }
+
+  .sigil-role {
+    font-size: 8px;
+  }
+
+  .report-card-note {
+    font-size: 10px;
+  }
+
+  .element-row {
+    grid-template-columns: 82px minmax(0, 1fr) 60px;
+  }
+
+  .element-label .el-name {
+    font-size: 11px;
+  }
+
+  .element-value {
+    font-size: 10.5px;
+  }
+
+  .element-value .role-pill {
+    display: inline-block;
+    padding: 1px 4px;
+    font-size: 8px;
+  }
+
+  .chart-note {
+    font-size: 10px;
+  }
+
+  .axis-row {
+    grid-template-columns: 78px minmax(0, 1fr) 36px;
+  }
+
+  .axis-label strong {
+    font-size: 13px;
+  }
+
+  .axis-label small {
+    font-size: 9px;
+  }
+
+  .axis-score {
+    font-size: 10.5px;
+  }
+
+  .axis-score small {
+    font-size: 8.5px;
+  }
+
+  .axis-summary {
+    padding: 11px;
+    font-size: 11px;
+    line-height: 1.85;
+  }
+
+  .pair-kicker {
+    font-size: 9px;
+  }
+
+  .pair-copy h2 {
+    font-size: 1.15rem;
+  }
+
+  .pair-text {
+    font-size: 12px;
+  }
+
+  .pair-use {
+    font-size: 11px;
+  }
+
+  .insight-panel-head {
+    font-size: 10px;
+  }
+
+  .insight-panel h3 {
+    font-size: 1.05rem;
+  }
+
+  .insight-panel li {
+    font-size: 12px;
+  }
+
+  .element-note p {
+    font-size: 12px;
+  }
+
+  .partner-note strong {
+    font-size: 11px;
+  }
+
+  .partner-note p {
+    font-size: 12px;
+  }
+
+  .path-card p {
+    font-size: 12px;
+  }
+
+  .path-disclaimer {
+    font-size: 10px;
+  }
+
+  .action-head p {
+    font-size: 12px;
+  }
+
+  .action-tag {
+    font-size: 9.5px;
+  }
+
+  .action-item h3 {
+    font-size: 1.1rem;
+  }
+
+  .action-item p {
+    font-size: 12px;
+  }
+
+  .action-footnote {
+    font-size: 10px;
+  }
+
+  .key-choice {
+    grid-template-columns: 20px 90px minmax(0, 1fr);
+  }
+
+  .key-choice-label {
+    font-size: 10px;
+  }
+
+  .key-choice-value {
+    font-size: 11.5px;
+  }
+
+  .local-note {
+    font-size: 9.5px;
+  }
+
+  .rules-body {
+    font-size: 11px;
+  }
+
+  .rules-card summary {
+    font-size: 11.5px;
+  }
+
+  .result-ending p {
+    font-size: 12px;
+  }
+
+  .result-footer p {
+    font-size: 9.5px;
+  }
+
+  .toast {
+    font-size: 11.5px;
+  }
+
+  .result-kicker {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 390px) {
+  .report-card-note {
+    display: block;
+    font-size: 9px;
+  }
+
+  .element-row {
+    grid-template-columns: 76px minmax(0, 1fr) 58px;
+  }
+
+  .element-value .role-pill {
+    display: inline-block;
+    font-size: 7.5px;
+  }
+
+  .element-label .el-name {
+    font-size: 10px;
+  }
+
+  .axis-row {
+    grid-template-columns: 74px minmax(0, 1fr) 34px;
+  }
+
+  .option-text {
+    font-size: 13.5px;
+  }
+
+  .map-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 9.5px;
+  }
+}
+
+@media (max-width: 350px) {
+  .result-meta-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .result-meta-grid > div:nth-child(3) {
+    grid-column: 1 / -1;
+    margin-top: 6px;
+    padding: 9px 0 0;
+    border-top: 1px solid rgba(201, 185, 157, 0.6);
+    border-left: 0;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  body::before,
+  .result-header-action,
+  .result-actions,
+  .result-ending,
+  .toast,
+  .confirm-dialog,
+  .result-footer-meta {
+    display: none !important;
+  }
+
+  .result-view {
+    background: #fff;
+  }
+
+  .result-main {
+    padding-top: 0;
+  }
+
+  .result-hero,
+  .report-card,
+  .pair-banner,
+  .action-panel,
+  .evidence-card,
+  .rules-card {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+</style>
+</head>
+<body>
+
+<svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow-right" viewBox="0 0 24 24">
+    <path d="M4.5 12h14.6M12.8 5.8l6.3 6.2-6.3 6.2" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24">
+    <path d="M19.5 12H4.9M11.2 18.2 4.9 12l6.3-6.2" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-close" viewBox="0 0 24 24">
+    <path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24">
+    <rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    <path d="M8.5 10V7.8a3.5 3.5 0 0 1 7 0V10M12 14v2.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    <path d="M12 7.5v5l3.2 1.9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24">
+    <path d="M4 8h14.5M15 4.5 18.5 8 15 11.5M20 16H5.5M9 12.5 5.5 16 9 19.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24">
+    <path d="M12 3.2c.45 4.9 2.1 6.55 7 7-4.9.45-6.55 2.1-7 7-.45-4.9-2.1-6.55-7-7 4.9-.45 6.55-2.1 7-7Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+    <path d="M19 17.1c.15 1.8.85 2.5 2.65 2.65-1.8.15-2.5.85-2.65 2.65-.15-1.8-.85-2.5-2.65-2.65 1.8-.15 2.5-.85 2.65-2.65Z" fill="currentColor" opacity=".7"/>
+  </symbol>
+  <symbol id="i-coin" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="15.5" fill="none" stroke="currentColor" stroke-width="1.55"/>
+    <rect x="19" y="19" width="10" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.55"/>
+    <path d="M24 3.5v5M24 39.5v5M3.5 24h5M39.5 24h5M9.5 9.5l3.4 3.4M35.1 35.1l3.4 3.4M38.5 9.5l-3.4 3.4M12.9 35.1l-3.4 3.4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-sprout" viewBox="0 0 48 48">
+    <path d="M24 41V19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M24 27C16.2 27 11 21.8 11 14c7.8 0 13 5.2 13 13Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M24 34c7.8 0 13-5.2 13-13-7.8 0-13 5.2-13 13Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M16.5 41h15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-wave" viewBox="0 0 48 48">
+    <path d="M8 18c5-4.1 10-4.1 15 0s10 4.1 15 0M8 27c5-4.1 10-4.1 15 0s10 4.1 15 0M8 36c5-4.1 10-4.1 15 0s10 4.1 15 0" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"/>
+    <circle cx="24" cy="9" r="2.8" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-flame" viewBox="0 0 48 48">
+    <path d="M25 42c-8.2 0-14.1-5.3-14.1-12.4 0-6.8 5.2-10.8 8.7-16.5.5 5.6 2.6 7.9 5.7 10.1-.2-5.4 1.9-9.3 5.4-12.8 5.3 6.8 8.3 12.1 8.3 19.2C39 36.7 33.1 42 25 42Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M25 35.8c-3.4 0-5.6-2.1-5.6-5 0-2.4 2-4.5 4.4-7.4.4 2.9 1.6 4.1 2.9 5.5.7.8 3.9 2.6 3.9 5 0 2.5-2.4 1.9-5.6 1.9Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-terrace" viewBox="0 0 48 48">
+    <path d="M7 16h34M11.5 16l3.1 8h18.8l3.1-8M15.5 24l3 8h11l3-8M19.5 32l2.1 6h4.8l2.1-6M8 41h32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18 9.5h12M21 6h6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
+<div id="app">
+  <!-- =====================================================
+       首页
+       ===================================================== -->
+  <section id="homeView" class="view home-view">
+    <header class="home-header">
+      <div class="wrap">
+        <button class="brand" type="button" id="homeBrand" aria-label="生财有方，回到顶部">
+          <span class="brand-seal" aria-hidden="true">财</span>
+          <span class="brand-text">
+            <strong>生财有方</strong>
+            <small>WEALTH BY NATURE</small>
+          </span>
+        </button>
+        <nav class="home-nav" aria-label="首页导航">
+          <button class="nav-link" type="button" data-scroll="types">五种财性</button>
+          <button class="nav-link" type="button" data-scroll="method">测评方法</button>
+        </nav>
+        <button class="btn btn-primary btn-small js-start" type="button">
+          <span class="header-start-label">开始测评</span>
+          <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap">
+        <section class="hero" aria-labelledby="heroTitle">
+          <div class="hero-copy">
+            <p class="eyebrow">五行财性 · 原创自我探索</p>
+            <h1 class="hero-title" id="heroTitle">
+              <span class="title-line">你适合</span>
+              <span class="title-line title-line--accent"><em>发什么财</em><span class="qmark">？</span></span>
+            </h1>
+            <p class="hero-lead">不是算你什么时候暴富，而是看清：你靠什么创造价值，又容易在哪里漏掉它。</p>
+            <p class="hero-sub">18 道贴近日常的选择题，融合五行意象与现代行为自评，生成一份只属于你的「生财说明书」。</p>
+            <div class="hero-actions">
+              <button class="btn btn-primary js-start" type="button">
+                <span class="start-label">开始探索我的财性</span>
+                <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+              </button>
+              <button class="btn btn-text" type="button" data-scroll="types">
+                先认识五种财性
+                <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+              </button>
+            </div>
+            <div class="hero-meta" aria-label="测评信息">
+              <span><b>18</b> 道情境题</span>
+              <span><b>4</b> 分钟</span>
+              <span><b>0</b> 条个人信息</span>
+            </div>
+            <div class="resume-strip" id="resumeStrip" hidden>
+              <span class="resume-icon" aria-hidden="true">
+                <svg><use href="#i-clock"></use></svg>
+              </span>
+              <div class="resume-copy">
+                <p id="resumeText"></p>
+              </div>
+              <div class="resume-actions">
+                <button class="resume-continue" id="resumeContinue" type="button">继续</button>
+                <button class="resume-reset" id="resumeReset" type="button">重新开始</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="visual-frame" aria-hidden="true"></div>
+            <svg class="hero-illustration" viewBox="0 0 640 660" role="img" aria-labelledby="heroArtTitle heroArtDesc">
+              <title id="heroArtTitle">五行财性罗盘原创插画</title>
+              <desc id="heroArtDesc">一枚朱红财印位于中央，周围环绕金、木、水、火、土五种财性，连接成一张财富地图。</desc>
+              <defs>
+                <radialGradient id="artHalo" cx="50%" cy="44%" r="55%">
+                  <stop offset="0" stop-color="#fffaf0"/>
+                  <stop offset="0.68" stop-color="#f8f1e3"/>
+                  <stop offset="1" stop-color="#eee3d0"/>
+                </radialGradient>
+                <linearGradient id="artCoin" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#ead7b3"/>
+                  <stop offset="0.48" stop-color="#c9aa74"/>
+                  <stop offset="1" stop-color="#ad8a51"/>
+                </linearGradient>
+                <filter id="artShadow" x="-40%" y="-40%" width="180%" height="180%">
+                  <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#40301c" flood-opacity="0.13"/>
+                </filter>
+              </defs>
+
+              <ellipse cx="320" cy="585" rx="225" ry="24" fill="#2b3b30" opacity="0.055"/>
+              <circle cx="320" cy="318" r="258" fill="#e9ddc7" opacity="0.33"/>
+              <path d="M83 318c20-113 124-203 238-203 121 0 225 98 236 220 10 110-65 198-167 228-113 33-232-23-276-124-20-47-25-80-31-121Z" fill="#f0e5d2" opacity="0.52"/>
+              <circle cx="320" cy="318" r="241" fill="url(#artHalo)" stroke="#d9c9aa" stroke-width="1.1"/>
+              <circle cx="320" cy="318" r="224" fill="none" stroke="#bda67d" stroke-opacity="0.32" stroke-width="1"/>
+              <g class="orbit-ring" opacity="0.7">
+                <circle cx="320" cy="318" r="208" fill="none" stroke="#bda67d" stroke-width="1" stroke-dasharray="1 13" stroke-linecap="round"/>
+                <circle cx="320" cy="318" r="180" fill="none" stroke="#cbb995" stroke-opacity="0.4" stroke-width="1"/>
+              </g>
+              <path d="M320 101 512 244 439 462 201 462 128 244Z" fill="none" stroke="#bca57d" stroke-width="1.15" stroke-dasharray="2 8" stroke-linejoin="round" opacity="0.82"/>
+              <path d="M320 101 439 462M512 244 201 462M320 101 201 462M128 244 439 462M512 244 128 244" fill="none" stroke="#c8b38e" stroke-width="0.6" stroke-dasharray="1 10" opacity="0.38"/>
+              <circle cx="552" cy="158" r="4" fill="#b89155" opacity="0.72"/>
+              <circle cx="92" cy="382" r="3" fill="#b89155" opacity="0.55"/>
+              <circle cx="485" cy="526" r="2.5" fill="#b89155" opacity="0.5"/>
+
+              <g class="orbit-dot" opacity="0.7">
+                <circle cx="320" cy="110" r="4" fill="#b89155"/>
+              </g>
+              <g class="orbit-dot" opacity="0.55" style="animation-delay:1.7s">
+                <circle cx="524" cy="374" r="3" fill="#b89155"/>
+              </g>
+
+              <g filter="url(#artShadow)">
+                <circle cx="320" cy="318" r="150" fill="url(#artCoin)" opacity="0.82"/>
+                <circle cx="320" cy="318" r="139" fill="#faf4e7" stroke="#cdb58d" stroke-width="1.2"/>
+                <circle cx="320" cy="318" r="125" fill="none" stroke="#d3bfa0" stroke-width="1" stroke-dasharray="2 8"/>
+              </g>
+              <path id="artCircleLabel" d="M320 195a123 123 0 1 1-.01 0" fill="none"/>
+              <text fill="#8b7858" font-family="Georgia, serif" font-size="8.5" letter-spacing="2.1">
+                <textPath href="#artCircleLabel" startOffset="3%">FIVE WAYS OF WEALTH · YOUR OWN WAY ·</textPath>
+              </text>
+
+              <g transform="rotate(-4.5 320 318)" filter="url(#artShadow)">
+                <rect x="254" y="250" width="132" height="139" rx="13" fill="#b44935"/>
+                <rect x="263" y="259" width="114" height="121" rx="8" fill="none" stroke="#f5e6cd" stroke-opacity="0.5" stroke-width="1"/>
+                <text x="320" y="345" text-anchor="middle" fill="#fff6e5" font-family="'Songti SC','STSong','SimSun',serif" font-size="78" font-weight="700" letter-spacing="0">财</text>
+                <path d="M291 365h58" stroke="#f1d9b8" stroke-opacity="0.42" stroke-width="1"/>
+              </g>
+              <path d="M149 513c48-44 96-44 144-6 38 30 75 31 119 4 42-26 86-20 138 20" fill="none" stroke="#879883" stroke-opacity="0.5" stroke-width="1.1" stroke-linecap="round"/>
+              <path d="M178 529c39-31 77-30 112-3 29 22 53 24 82 9" fill="none" stroke="#c0a884" stroke-opacity="0.42" stroke-width="1" stroke-linecap="round"/>
+
+              <g transform="translate(320 101)">
+                <circle r="44" fill="#fbf7ed" stroke="#d5c6ac" stroke-width="1"/>
+                <circle r="35" fill="#497158"/>
+                <text y="8" text-anchor="middle" fill="#fff8e9" font-family="'Songti SC','STSong','SimSun',serif" font-size="24" font-weight="700">木</text>
+                <circle cx="0" cy="-35" r="2" fill="#497158"/>
+                <text y="63" text-anchor="middle" fill="#7d786d" font-family="'Songti SC','STSong','SimSun',serif" font-size="10" letter-spacing="2">生长</text>
+              </g>
+              <g transform="translate(512 244)">
+                <circle r="44" fill="#fbf7ed" stroke="#d5c6ac" stroke-width="1"/>
+                <circle r="35" fill="#b64e39"/>
+                <text y="8" text-anchor="middle" fill="#fff8e9" font-family="'Songti SC','STSong','SimSun',serif" font-size="24" font-weight="700">火</text>
+                <circle cx="0" cy="-35" r="2" fill="#b64e39"/>
+                <text x="3" y="63" text-anchor="middle" fill="#7d786d" font-family="'Songti SC','STSong','SimSun',serif" font-size="10" letter-spacing="2">势能</text>
+              </g>
+              <g transform="translate(439 462)">
+                <circle r="44" fill="#fbf7ed" stroke="#d5c6ac" stroke-width="1"/>
+                <circle r="35" fill="#8e6a44"/>
+                <text y="8" text-anchor="middle" fill="#fff8e9" font-family="'Songti SC','STSong','SimSun',serif" font-size="24" font-weight="700">土</text>
+                <circle cx="0" cy="-35" r="2" fill="#8e6a44"/>
+                <text x="3" y="63" text-anchor="middle" fill="#7d786d" font-family="'Songti SC','STSong','SimSun',serif" font-size="10" letter-spacing="2">承载</text>
+              </g>
+              <g transform="translate(201 462)">
+                <circle r="44" fill="#fbf7ed" stroke="#d5c6ac" stroke-width="1"/>
+                <circle r="35" fill="#a57939"/>
+                <text y="8" text-anchor="middle" fill="#fff8e9" font-family="'Songti SC','STSong','SimSun',serif" font-size="24" font-weight="700">金</text>
+                <circle cx="0" cy="-35" r="2" fill="#a57939"/>
+                <text x="-3" y="63" text-anchor="middle" fill="#7d786d" font-family="'Songti SC','STSong','SimSun',serif" font-size="10" letter-spacing="2">价值</text>
+              </g>
+              <g transform="translate(128 244)">
+                <circle r="44" fill="#fbf7ed" stroke="#d5c6ac" stroke-width="1"/>
+                <circle r="35" fill="#4b6c7e"/>
+                <text y="8" text-anchor="middle" fill="#fff8e9" font-family="'Songti SC','STSong','SimSun',serif" font-size="24" font-weight="700">水</text>
+                <circle cx="0" cy="-35" r="2" fill="#4b6c7e"/>
+                <text x="-3" y="63" text-anchor="middle" fill="#7d786d" font-family="'Songti SC','STSong','SimSun',serif" font-size="10" letter-spacing="2">流动</text>
+              </g>
+
+              <g opacity="0.58">
+                <circle cx="91" cy="491" r="19" fill="none" stroke="#b1915d" stroke-width="1"/>
+                <rect x="86" y="486" width="10" height="10" rx="1" fill="none" stroke="#b1915d" stroke-width="1"/>
+                <circle cx="538" cy="425" r="11" fill="none" stroke="#b1915d" stroke-width="0.9" stroke-dasharray="1 4"/>
+              </g>
+              <path d="M91 563c7-24 8-39 9-58M94 537c-13-11-21-13-30-11M94 527c12-12 20-17 30-17" fill="none" stroke="#557561" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M515 551c-13-7-21-16-25-26M516 551c15-2 26-9 34-19M516 551c5-13 5-24 0-35" fill="none" stroke="#8a9b89" stroke-width="1.1" stroke-linecap="round"/>
+              <circle cx="80" cy="173" r="1.7" fill="#b44935" opacity="0.5"/>
+              <circle cx="560" cy="526" r="1.8" fill="#b44935" opacity="0.42"/>
+            </svg>
+            <p class="art-caption">五 行 财 性 图 · 原 创 手 绘</p>
+            <span class="vertical-mark" aria-hidden="true">五行生财 · 各得其时</span>
+          </div>
+        </section>
+      </div>
+
+      <div class="manifesto">
+        <div class="wrap" aria-hidden="true">
+          <span>不猜命</span>
+          <i></i>
+          <span>不算运</span>
+          <i></i>
+          <span>只拆解你创造价值的惯性</span>
+        </div>
+      </div>
+
+      <section class="section" id="types" aria-labelledby="typesTitle">
+        <div class="wrap">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">THE FIVE WEALTH NATURES</p>
+              <h2 id="typesTitle">五种财性，<br>你靠近哪一种？</h2>
+            </div>
+            <div class="section-side">
+              <p>没有更高级的那一种，只有更顺手的生财方式。结果会给出一主一副，像两把不同用途的钥匙。</p>
+              <span class="section-index">01 / 05 &nbsp;·&nbsp; 五型概览</span>
+            </div>
+          </div>
+
+          <div class="types-grid" tabindex="0" role="group" aria-label="五种财性介绍，窄屏下可左右滚动查看更多">
+            <article class="type-card" data-element="金">
+              <div class="type-card-top">
+                <span class="type-no">01 / METAL</span>
+                <span class="type-icon-wrap" aria-hidden="true"><svg><use href="#i-coin"></use></svg></span>
+              </div>
+              <h3><span class="type-char">金</span>铸金者</h3>
+              <p>把专业铸成别人愿意长期买单的价值，用标准和稀缺性换来定价权。</p>
+              <div class="type-tags"><span>专业壁垒</span><span>定价权</span></div>
+            </article>
+            <article class="type-card" data-element="木">
+              <div class="type-card-top">
+                <span class="type-no">02 / WOOD</span>
+                <span class="type-icon-wrap" aria-hidden="true"><svg><use href="#i-sprout"></use></svg></span>
+              </div>
+              <h3><span class="type-char">木</span>种木者</h3>
+              <p>把热爱养成一片森林。前期慢慢扎根，后期让内容、信任与复利替你生长。</p>
+              <div class="type-tags"><span>内容资产</span><span>长期复利</span></div>
+            </article>
+            <article class="type-card" data-element="水">
+              <div class="type-card-top">
+                <span class="type-no">03 / WATER</span>
+                <span class="type-icon-wrap" aria-hidden="true"><svg><use href="#i-wave"></use></svg></span>
+              </div>
+              <h3><span class="type-char">水</span>驭水者</h3>
+              <p>在人和机会之间找到通路，用信息、连接与灵活转身，把流动变成收入。</p>
+              <div class="type-tags"><span>连接</span><span>信息差</span></div>
+            </article>
+            <article class="type-card" data-element="火">
+              <div class="type-card-top">
+                <span class="type-no">04 / FIRE</span>
+                <span class="type-icon-wrap" aria-hidden="true"><svg><use href="#i-flame"></use></svg></span>
+              </div>
+              <h3><span class="type-char">火</span>燃火者</h3>
+              <p>先被看见，再被选择。你擅长把价值讲出来，让注意力与信任为你开路。</p>
+              <div class="type-tags"><span>影响力</span><span>表达力</span></div>
+            </article>
+            <article class="type-card" data-element="土">
+              <div class="type-card-top">
+                <span class="type-no">05 / EARTH</span>
+                <span class="type-icon-wrap" aria-hidden="true"><svg><use href="#i-terrace"></use></svg></span>
+              </div>
+              <h3><span class="type-char">土</span>厚土者</h3>
+              <p>把小事做成系统，用交付、流程与稳定现金流，把一砖一瓦垒成底盘。</p>
+              <div class="type-tags"><span>稳健经营</span><span>现金流</span></div>
+            </article>
+          </div>
+          <p class="swipe-hint" aria-hidden="true">
+            <svg><use href="#i-swap"></use></svg>
+            左右滑动，查看五种财性
+          </p>
+          <p class="types-footnote">
+            <span class="mini-seal" aria-hidden="true">合</span>
+            结果不只贴一个标签：主财性决定你从哪里发力，副财性决定你还能借用哪股力量。
+          </p>
+        </div>
+      </section>
+
+      <figure class="quote-block">
+        <blockquote>“财不是追来的，<em>是你把某种价值，放到了对的人面前。</em>”</blockquote>
+        <figcaption>生财有方 · 测评手记</figcaption>
+      </figure>
+
+      <section class="method-panel" id="method" aria-labelledby="methodTitle">
+        <div class="wrap">
+          <div class="method-inner">
+            <div class="method-intro">
+              <p class="eyebrow eyebrow--light">HOW IT WORKS</p>
+              <h2 id="methodTitle">不猜命，<br>只拆解选择。</h2>
+              <p>我们把“五行”当作五种观察财富惯性的文化语言：它负责提供意象，你的选择负责提供证据。</p>
+              <div class="method-note">
+                <span class="seal-small" aria-hidden="true">注</span>
+                <p>五行与生克在这里只作为文化隐喻，不用于预测命运，也不替代心理、职业或财务专业建议。</p>
+              </div>
+            </div>
+
+            <div class="method-steps">
+              <article class="method-step">
+                <span class="method-step-no">01</span>
+                <div>
+                  <h3>从具体情境出发</h3>
+                  <p>18 道贴近日常的选择题，不问你“像不像某种标签”，只问你在真实场景里会怎么做。</p>
+                </div>
+              </article>
+              <article class="method-step">
+                <span class="method-step-no">02</span>
+                <div>
+                  <h3>两套刻度，一起看</h3>
+                  <p>五行财性决定你的发力方式，四项生财能力显示你靠什么把机会变成钱。</p>
+                  <div class="formula" aria-label="计分公式">
+                    <span>主财性 +5</span>
+                    <span>辅财性 +1</span>
+                    <span>每题两项能力各 +1</span>
+                  </div>
+                </div>
+              </article>
+              <article class="method-step">
+                <span class="method-step-no">03</span>
+                <div>
+                  <h3>结果必须可复现</h3>
+                  <p>固定权重、明确取舍，没有随机分配。修改答案，能量盘与建议会一起重算。</p>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="method-bottom">
+            <div class="mini-elements" aria-hidden="true">
+              <span class="mini-el">金</span>
+              <span class="mini-el">木</span>
+              <span class="mini-el">水</span>
+              <span class="mini-el">火</span>
+              <span class="mini-el">土</span>
+            </div>
+            <button class="btn btn-light js-start" type="button">
+              <span class="start-label">开始探索我的财性</span>
+              <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-measure" aria-labelledby="aboutTitle">
+        <div class="wrap">
+          <div class="about-heading">
+            <div>
+              <p class="section-kicker">A NOTE BEFORE YOU START</p>
+              <h2 id="aboutTitle">把它当作一面镜子。</h2>
+            </div>
+            <p>这是原创趣味自我探索工具，不是心理或命理诊断，更不是一份“你注定怎样”的判词。</p>
+          </div>
+          <div class="about-grid">
+            <article class="about-item">
+              <span>01 / 关于结果</span>
+              <h3>有依据，不随机</h3>
+              <p>每一类结果都由你的 18 次选择按固定规则算出；同分也有明确取舍，不靠运气抽签。</p>
+            </article>
+            <article class="about-item">
+              <span>02 / 关于五行</span>
+              <h3>是意象，不是预言</h3>
+              <p>金木水火土是观察世界的文化语言，用来帮你换个角度理解自己，不用于预测吉凶。</p>
+            </article>
+            <article class="about-item">
+              <span>03 / 关于隐私</span>
+              <h3>只留在你的浏览器</h3>
+              <p>不登录、不支付、不收集姓名生日。作答进度只存在本机，随时可以清空。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="home-footer">
+      <div class="wrap">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <div class="brand" aria-label="生财有方">
+              <span class="brand-seal" aria-hidden="true">财</span>
+              <span class="brand-text">
+                <strong>生财有方</strong>
+                <small>WEALTH BY NATURE</small>
+              </span>
+            </div>
+            <p class="footer-slogan">把价值做出来，<br>也把自己照顾好。</p>
+          </div>
+          <p class="footer-disclaimer">
+            <strong>免责声明</strong>
+            本测评为原创趣味自我探索内容，融合传统文化中的五行意象与现代行为自评，旨在提供观察自己的一个角度，不构成命理预测、心理诊断、职业规划或投资建议。结果与建议仅供参考，请结合真实情况独立判断。页面不收集任何个人信息，作答数据仅保存在当前浏览器本地。
+          </p>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 生财有方 · SHENGCAI YOUFANG</span>
+          <span>原创单页 · 离线可用 · 不收集个人信息</span>
+        </div>
+      </div>
+    </footer>
+  </section>
+
+  <!-- =====================================================
+       答题页
+       ===================================================== -->
+  <section id="quizView" class="view quiz-view" hidden>
+    <header class="quiz-header">
+      <div class="quiz-header-inner">
+        <button class="brand" type="button" id="quizBrand" aria-label="暂存并回到首页">
+          <span class="brand-seal" aria-hidden="true">财</span>
+          <span class="brand-text">
+            <strong>生财有方</strong>
+            <small>WEALTH BY NATURE</small>
+          </span>
+        </button>
+        <span class="quiz-header-divider" aria-hidden="true"></span>
+        <span class="quiz-header-title">五行财性 · 情境测评</span>
+        <button class="quiz-exit" type="button" id="exitQuizBtn">
+          暂存并退出
+          <svg aria-hidden="true"><use href="#i-close"></use></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="quiz-main">
+      <h1 class="sr-only">五行财性测评答题</h1>
+      <div class="quiz-progress">
+        <div class="progress-top">
+          <div>
+            <span class="quiz-act" id="quizAct">第一幕 · 财感直觉</span>
+            <p class="quiz-counter" id="quizCounter">第 01 题 / 共 18 题</p>
+          </div>
+          <div class="progress-meta">
+            <span>已完成 <b id="quizProgressText">0 / 18</b></span>
+            <span class="progress-saved" id="saveStatus">
+              <svg aria-hidden="true"><use href="#i-lock"></use></svg>
+              答案自动保存在本机
+            </span>
+          </div>
+        </div>
+        <div class="progress-track" id="quizProgressBar" role="progressbar" aria-label="答题进度" aria-valuemin="0" aria-valuemax="18" aria-valuenow="0">
+          <div class="progress-fill" id="quizProgressFill"></div>
+        </div>
+        <div class="review-bar" id="reviewBar" hidden>
+          <span>正在修改已完成的答案。点数字可跳转，改完后再更新结果。</span>
+          <button class="review-finish" type="button" id="reviewFinishBtn">
+            完成修改
+            <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+          </button>
+        </div>
+        <div class="answer-map" id="answerMap" aria-label="答题卡" hidden></div>
+      </div>
+
+      <section class="quiz-card" id="quizCard" aria-labelledby="questionTitle">
+        <div id="questionPanel"></div>
+        <div class="answer-hint" id="answerHint" role="alert" hidden>
+          <span aria-hidden="true">!</span>
+          <p>还没选哦。选一个更像你的答案，再继续。</p>
+        </div>
+        <div class="quiz-controls">
+          <button class="btn-back" type="button" id="prevBtn">
+            <svg aria-hidden="true"><use href="#i-arrow-left"></use></svg>
+            <span>上一题</span>
+          </button>
+          <p class="control-note">可随时返回修改</p>
+          <button class="btn btn-primary btn-next" type="button" id="nextBtn">
+            <span id="nextLabel">下一题</span>
+            <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+          </button>
+        </div>
+      </section>
+      <p class="quiz-footnote">没有标准答案。<span>第一反应，通常比“应该怎样”更诚实。</span></p>
+    </main>
+  </section>
+
+  <!-- =====================================================
+       结果页
+       ===================================================== -->
+  <section id="resultView" class="view result-view" hidden>
+    <header class="result-header">
+      <div class="wrap">
+        <button class="brand" type="button" id="resultBrand" aria-label="生财有方，回到首页">
+          <span class="brand-seal" aria-hidden="true">财</span>
+          <span class="brand-text">
+            <strong>生财有方</strong>
+            <small>WEALTH BY NATURE</small>
+          </span>
+        </button>
+        <div class="result-header-action">
+          <span class="result-header-note">YOUR WEALTH NATURE REPORT</span>
+          <button class="result-home-link" type="button" id="resultHomeTop">回到首页</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="result-main">
+      <section class="result-hero" aria-labelledby="resultTitle">
+        <div class="result-hero-copy">
+          <p class="result-kicker">
+            你的财性报告
+            <span class="small-pill">无随机分配</span>
+          </p>
+          <div class="result-name-row">
+            <span class="result-seal" id="resultSeal" aria-hidden="true">金</span>
+            <div>
+              <p class="result-element-label" id="resultElementLabel">主财性 · 金</p>
+              <h1 id="resultTitle">铸金者</h1>
+            </div>
+          </div>
+          <p class="result-motto" id="resultMotto"></p>
+          <p class="result-summary" id="resultSummary"></p>
+          <div class="result-keywords" id="resultKeywords"></div>
+          <div class="result-meta-grid">
+            <div>
+              <span>辅助财性</span>
+              <strong id="resultSecondary">水 · 驭水者</strong>
+            </div>
+            <div>
+              <span>主导能力</span>
+              <strong id="resultTopAxis">洞察</strong>
+            </div>
+            <div>
+              <span>值得补强</span>
+              <strong id="resultWeakAxis">守成</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-visual">
+          <div class="wealth-sigil" id="resultSigil" aria-hidden="true">
+            <svg class="sigil-lines" viewBox="0 0 400 400" focusable="false">
+              <circle class="sigil-ring" cx="200" cy="200" r="177" stroke-dasharray="1 9" opacity=".65"/>
+              <circle class="sigil-orbit" cx="200" cy="200" r="158" stroke="currentColor" stroke-opacity=".16" stroke-width="1" stroke-dasharray="2 10" fill="none" style="color: var(--accent)"/>
+              <circle class="sigil-disc" cx="200" cy="200" r="124"/>
+              <polygon class="sigil-polygon" points="200,36 352,142 296,328 104,328 48,142"/>
+              <circle class="sigil-ring" cx="200" cy="200" r="83" opacity=".7"/>
+            </svg>
+            <div class="sigil-node" data-el="木" style="left: 50%; top: 9%;"><span class="sigil-char">木</span><span class="sigil-name">种木者</span><span class="sigil-role">辅</span></div>
+            <div class="sigil-node" data-el="火" style="left: 88%; top: 35.5%;"><span class="sigil-char">火</span><span class="sigil-name">燃火者</span><span class="sigil-role">辅</span></div>
+            <div class="sigil-node" data-el="土" style="left: 74%; top: 82%;"><span class="sigil-char">土</span><span class="sigil-name">厚土者</span><span class="sigil-role">辅</span></div>
+            <div class="sigil-node" data-el="金" style="left: 26%; top: 82%;"><span class="sigil-char">金</span><span class="sigil-name">铸金者</span><span class="sigil-role">辅</span></div>
+            <div class="sigil-node" data-el="水" style="left: 12%; top: 35.5%;"><span class="sigil-char">水</span><span class="sigil-name">驭水者</span><span class="sigil-role">辅</span></div>
+            <div class="sigil-center">
+              <span id="sigilChar">金</span>
+              <small id="sigilName">铸金者 · 主财性</small>
+            </div>
+          </div>
+          <p class="sigil-caption">实心为主财性 · 双环为辅助财性</p>
+        </div>
+      </section>
+
+      <div class="report-grid">
+        <section class="report-card energy-card" aria-labelledby="energyTitle">
+          <div class="report-card-head">
+            <div>
+              <p class="report-card-kicker">ELEMENTAL BALANCE</p>
+              <h2 id="energyTitle">五行能量构成</h2>
+            </div>
+            <p class="report-card-note">18 题累计<br>合计 100%</p>
+          </div>
+          <div class="element-bars" id="elementBars"></div>
+          <p class="chart-note">五行在这里代表五种生财方式，而非命格高低。占比越高，说明你在这一路径上的选择倾向越明显。</p>
+        </section>
+
+        <section class="report-card axis-card" aria-labelledby="axisTitle">
+          <div class="report-card-head">
+            <div>
+              <p class="report-card-kicker">FOUR WEALTH SKILLS</p>
+              <h2 id="axisTitle">四种生财能力</h2>
+            </div>
+            <p class="report-card-note">每题记 1 分<br>单项满分 18</p>
+          </div>
+          <div class="axis-bars" id="axisBars"></div>
+          <p class="axis-summary" id="axisSummary"></p>
+        </section>
+      </div>
+
+      <section class="pair-banner" aria-labelledby="pairTitle">
+        <div class="pair-mark" aria-hidden="true">
+          <span class="pair-el" id="pairMain">金</span>
+          <i>×</i>
+          <span class="pair-el" id="pairAux">水</span>
+        </div>
+        <div class="pair-copy">
+          <p class="pair-kicker">五行搭档 · <span id="pairType">补给关系</span> · 仅作文化意象</p>
+          <h2 id="pairTitle"></h2>
+          <p class="pair-text" id="pairText"></p>
+          <p class="pair-use"><strong>副财性用法</strong><span id="pairUse"></span></p>
+        </div>
+        <span class="pair-stamp" aria-hidden="true">相生相成</span>
+      </section>
+
+      <section class="result-section" aria-labelledby="coreTitle">
+        <div class="section-rail">
+          <p class="rail-index">01 / CORE INSTINCT</p>
+          <h2 id="coreTitle">你靠什么，<br>把钱赚回来？</h2>
+          <p class="rail-note">这是一份基于选择的倾向描述，不是对你的固定定义。</p>
+        </div>
+        <div class="section-content">
+          <p class="lead-copy" id="resultLong"></p>
+          <div class="profile-panels">
+            <article class="insight-panel">
+              <p class="insight-panel-head"><span class="panel-dot" aria-hidden="true"></span>你的生财优势</p>
+              <h3>已经长在手里的能力</h3>
+              <ul id="strengthList"></ul>
+            </article>
+            <article class="insight-panel insight-panel--leak">
+              <p class="insight-panel-head"><span class="panel-dot" aria-hidden="true"></span>提前设一道边界</p>
+              <h3>容易漏财的惯性</h3>
+              <ul id="leakList"></ul>
+            </article>
+          </div>
+          <div class="element-note" id="elementNote" data-char="金">
+            <p id="elementNoteText"></p>
+          </div>
+          <div class="partner-note">
+            <span class="partner-icon" aria-hidden="true">
+              <svg><use href="#i-swap"></use></svg>
+            </span>
+            <div>
+              <strong>你的互补搭档</strong>
+              <p id="partnerNote"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="result-section" aria-labelledby="pathsTitle">
+        <div class="section-rail">
+          <p class="rail-index">02 / POSSIBLE PATHS</p>
+          <h2 id="pathsTitle">更适合你的<br>三条财路</h2>
+          <p class="rail-note">财路是优势方向，不是职业指定。任何方向都值得先用小成本验证。</p>
+        </div>
+        <div class="section-content">
+          <div class="path-grid" id="pathGrid"></div>
+          <p class="path-disclaimer">以上是“更容易发挥你现有优势”的路径灵感，不代表收益承诺。涉及投资、借贷或重大职业选择时，请结合自身情况并寻求相应专业意见。</p>
+        </div>
+      </section>
+
+      <section class="action-panel" aria-labelledby="actionTitle">
+        <div class="action-head">
+          <div>
+            <p class="rail-index">03 / A SMALL EXPERIMENT</p>
+            <h2 id="actionTitle">先把第一步，走小一点。</h2>
+            <p>不需要立刻改命，也不需要押上全部。选一件 30 天内可以完成的小事，用真实反馈替代想象。</p>
+          </div>
+          <span class="action-head-note">SMALL STEPS<br>REAL FEEDBACK</span>
+        </div>
+        <div class="action-list" id="actionsList"></div>
+        <p class="action-footnote">
+          <svg aria-hidden="true"><use href="#i-spark"></use></svg>
+          <span>不借钱、不押上必要生活费、不盲目辞职。先验证，再扩大。</span>
+        </p>
+      </section>
+
+      <div class="evidence-grid">
+        <section class="evidence-card" aria-labelledby="evidenceTitle">
+          <p class="report-card-kicker">WHY THIS RESULT</p>
+          <h2 id="evidenceTitle">这不是随机生成</h2>
+          <p class="evidence-copy">你的主财性由 18 题的最高累计分决定。下面三个选择，是理解这份结果的关键切片；回到答题页可以修改任意一题。</p>
+          <div class="key-choices" id="keyChoices"></div>
+          <p class="local-note">
+            <svg aria-hidden="true"><use href="#i-lock"></use></svg>
+            所有答案仅在你的浏览器内处理，不上传、不收集个人信息。
+          </p>
+        </section>
+
+        <section class="rules-card" aria-labelledby="rulesTitle">
+          <p class="report-card-kicker">HOW IT IS CALCULATED</p>
+          <h2 id="rulesTitle">计分规则，写在明面上</h2>
+          <div class="rule-formula" aria-label="计分权重">
+            <span>主财性 +5</span>
+            <span>辅财性 +1</span>
+            <span>每题两种能力各 +1</span>
+          </div>
+          <p class="rules-intro">没有随机数，也没有隐藏权重。每题选一个答案，系统会同时记录你的财性倾向和能力调用。</p>
+          <details open>
+            <summary>完整计算说明</summary>
+            <div class="rules-body">
+              <p>每题选择一个选项。该选项会给主财性加 5 分、辅财性加 1 分，同时给两项能力各加 1 分。18 题累计后，得分最高的财性为“主财性”，第二高的为“副财性”。</p>
+              <p>若最高分并列，先看最后一题中你是否直接选择了同分财性；若仍并列，则按答题顺序从后往前比较直接选择，再比较辅助得分。若依旧相同，按“金、木、水、火、土”的固定顺序呈现。能力项同分时，按“洞察、行动、连接、守成”的固定顺序呈现。</p>
+              <p>全部计算不使用随机数。修改答案后，请点击“完成修改 / 生成我的结果”重新计算。五行与生克仅用于组织表达，不预测吉凶。</p>
+            </div>
+          </details>
+        </section>
+      </div>
+
+      <div class="result-ending">
+        <div class="result-ending-copy">
+          <p class="rail-index">NOT A FINAL ANSWER</p>
+          <h2>答案不是定论。</h2>
+          <p>你可以回去修改任何一题，结果会重新计算；也可以清空答案，换一种心境再来一次。真正重要的，是带着一个更清楚的问题回到生活里。</p>
+        </div>
+        <div class="result-actions">
+          <button class="btn btn-ghost" type="button" id="modifyBtn">
+            <svg aria-hidden="true"><use href="#i-arrow-left"></use></svg>
+            返回修改答案
+          </button>
+          <button class="btn btn-primary js-restart" type="button">
+            <span>重新测试</span>
+            <svg aria-hidden="true"><use href="#i-swap"></use></svg>
+          </button>
+          <button class="btn btn-text" type="button" id="resultHomeBtn">回到首页</button>
+        </div>
+      </div>
+
+      <footer class="result-footer">
+        <p>本报告为原创趣味自我探索内容，融合传统文化五行意象与行为自评，不构成命理预测、心理诊断、职业规划或投资建议。五行关系仅作文化隐喻；任何行动请量力而行。页面无登录、支付、广告，不收集个人信息，作答与结果仅保存在当前浏览器。</p>
+        <div class="result-footer-meta">
+          <span>© 2026 生财有方 · SHENGCAI YOUFANG</span>
+          <span>结果由固定规则计算 · 无随机项</span>
+        </div>
+      </footer>
+    </main>
+  </section>
+</div>
+
+<dialog class="confirm-dialog" id="resetDialog" aria-labelledby="resetTitle">
+  <div class="dialog-inner">
+    <button class="dialog-close" type="button" data-dialog-close aria-label="关闭">
+      <svg aria-hidden="true"><use href="#i-close"></use></svg>
+    </button>
+    <span class="dialog-seal" aria-hidden="true">重</span>
+    <h2 id="resetTitle">清空答案，重新开始？</h2>
+    <p>这会移除本机保存的作答记录，回到第 1 题重新开始。已经算出的结果不会保留，此操作不可撤销。</p>
+    <div class="dialog-actions">
+      <button class="btn btn-ghost" type="button" data-dialog-close>先不重测</button>
+      <button class="btn btn-danger" type="button" id="confirmReset">清空并开始</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =========================================================
+     数据：五行、能力与 18 道题
+     ========================================================= */
+
+  var ELEMENT_ORDER = ["金", "木", "水", "火", "土"];
+  var AXIS_ORDER = ["洞察", "行动", "连接", "守成"];
+  var STORAGE_KEY = "shengcai-fang.answer-state.v1";
+  var LETTERS = ["A", "B", "C", "D", "E"];
+
+  var ACTS = [
+    { name: "第一幕 · 财感直觉" },
+    { name: "第二幕 · 生财方式" },
+    { name: "第三幕 · 合作与影响" },
+    { name: "第四幕 · 风险与节奏" },
+    { name: "第五幕 · 五行校准" }
+  ];
+
+  var ELEMENTS = {
+    "金": {
+      name: "铸金者",
+      en: "THE VALUE MAKER",
+      color: "#A57939",
+      deep: "#6D4B1D",
+      soft: "#F2E5CD",
+      bright: "#E2C286",
+      motto: "把专业铸成筹码，让价值替你定价。",
+      summary: "你相信钱会流向稀缺、标准和可验证的价值。你更愿意把一件事做深、做贵、做久，而不是被每一个热点牵着走。",
+      long: "你对“值不值”有天然的敏感度。别人看到热闹，你更想看清成本、品质与议价空间。你不是靠讨好所有人赚钱，而是靠让对的人知道：这件事交给你，值得。当你的专业足够扎实，高客单、精品化或长期资产配置，都会比盲目追风口更顺手。",
+      strengths: [
+        "能快速判断一件事的成本、品质与真实价值。",
+        "愿意长期打磨专业，把经验沉淀成别人难以替代的壁垒。",
+        "对定价、交付边界和资产安全感有天然直觉。"
+      ],
+      leaks: [
+        "完美主义容易拖慢回款，让“再打磨一下”变成迟迟不交付。",
+        "明明做出了价值，却不好意思谈钱、谈涨价。",
+        "为设备与品质过度投入，忽略现金流什么时候回正。"
+      ],
+      paths: [
+        { name: "高客单专业服务", desc: "咨询、设计、技术、法律或顾问型服务，用深度和结果换溢价。" },
+        { name: "精品产品与手艺", desc: "少而精的产品、工艺或小众品牌，用品质建立复购与口碑。" },
+        { name: "长期资产配置与打理", desc: "在能力圈内管理已有资源，用规则、分散和耐心守住成果。" }
+      ],
+      partner: "你适合与能把你推到台前、并帮你设计收费结构的人合作。火帮你被看见，水帮你连接，土替你守住节奏。",
+      note: "金，主收敛、规则与价值。你的财气不在“更多”，而在“更值”。",
+      seed: "以专业、标准和定价"
+    },
+    "木": {
+      name: "种木者",
+      en: "THE LONG GROWER",
+      color: "#4A7158",
+      deep: "#2E503B",
+      soft: "#E2EBE3",
+      bright: "#A8C8AD",
+      motto: "把热爱养成森林，让时间替你复利。",
+      summary: "你相信真正的钱会长在时间里。你愿意先创造价值、养出信任，再让它慢慢变成可持续的资产。",
+      long: "你对从无到有、慢慢长大的事情有耐心。别人追即时回报，你更在意一件事能不能持续、能不能积累、三年后是否仍然成立。内容、教育、产品、社群与品牌，都是你天然的土壤。你需要的不是更快，而是更清晰的阶段里程碑，以及对“别人真正愿意为什么付费”的验证。",
+      strengths: [
+        "能把一个想法耐心养成持续输出的内容或产品。",
+        "容易赢得长期信任，让用户愿意陪你一起长大。",
+        "对趋势的长期方向有感觉，愿意为复利等待。"
+      ],
+      leaks: [
+        "前期投入太久，迟迟没有设置阶段性的回款点。",
+        "把“我喜欢的”当成“别人愿意买单的”，缺少小步验证。",
+        "同时养太多项目，精力被稀释，最后都长不大。"
+      ],
+      paths: [
+        { name: "内容与知识资产", desc: "课程、专栏、社群、模板或方法体系，让一次积累被反复使用。" },
+        { name: "产品化的服务", desc: "把咨询或项目经验拆成标准路径，降低对单次时间的依赖。" },
+        { name: "小而深的品牌或社群", desc: "围绕一群具体的人，做长期、可持续的关系与复购。" }
+      ],
+      partner: "你适合与能把你推到台前、并帮你设计收费结构的人合作。火打开声量，金帮你定价，土帮你收口。",
+      note: "木，主生发、连接与成长。你的财气不在抢跑，而在持续长。",
+      seed: "以内容、耐心和长期积累"
+    },
+    "水": {
+      name: "驭水者",
+      en: "THE CONNECTOR",
+      color: "#4B6B7D",
+      deep: "#2F4E5E",
+      soft: "#E0EAEE",
+      bright: "#A4C4D1",
+      motto: "在人和机会之间，做那个让资源流动的人。",
+      summary: "你相信钱会流动：流进需求、信息和人的连接里。你更擅长看见机会之间的通路，而不是死守一种打法。",
+      long: "你对环境变化和人心流动很敏感，常能比旁人更早闻到机会。你擅长撮合、沟通、找入口，也愿意为了更好的机会调整方向。真正让水变成资产的，不是认识多少人，而是你能不能把一次次流动沉淀成方法、产品或长期关系。少一点“都可以”，多一点“我选择”，你的财路会更清楚。",
+      strengths: [
+        "容易获得信息，也容易让别人愿意和你交换资源。",
+        "面对变化反应快，能在不确定中找到新的入口。",
+        "擅长把不同的人、需求和资源连接成一件可推进的事。"
+      ],
+      leaks: [
+        "机会太多、方向太散，什么都想试一点。",
+        "只顾搭桥，没有沉淀自己的产品或资产。",
+        "人情与边界模糊，不好意思谈钱、收口或拒绝。"
+      ],
+      paths: [
+        { name: "资源撮合与商务合作", desc: "在供需之间搭桥，用信息、谈判和资源整合创造价值。" },
+        { name: "渠道、跨境与平台", desc: "连接不同市场、平台或人群，让流动本身产生收益。" },
+        { name: "咨询、经纪与社群", desc: "把关系网络变成可信任的服务，长期维护和复购。" }
+      ],
+      partner: "你需要一个能帮你做减法、把机会做成系统的人。土给你结构，金帮你定价，木帮你沉淀。",
+      note: "水，主流动、感知与变化。你的财气不在固守，而在看见连接。",
+      seed: "以连接、信息和灵活转向"
+    },
+    "火": {
+      name: "燃火者",
+      en: "THE SIGNAL MAKER",
+      color: "#B64E39",
+      deep: "#813424",
+      soft: "#F4E1DA",
+      bright: "#E5AE9C",
+      motto: "先被看见，再被选择，让影响力为你开路。",
+      summary: "你相信注意力是入口，信任是货币。你更愿意站到人前，把价值讲清楚，让别人先看见你。",
+      long: "你对趋势、情绪和表达有天然的敏感度。一个好点子经由你讲出来，会变得更有吸引力。你适合靠个人品牌、内容、营销和创意取得机会。但光能点亮，也能烧得太快：承诺要接得住，热度要沉淀成交付，情绪和现金流之间要留一道防火墙。",
+      strengths: [
+        "容易把复杂价值讲得让人心动，并迅速聚拢注意力。",
+        "对趋势和情绪有敏锐嗅觉，敢于在窗口期行动。",
+        "有感染力，能带动人一起把事情做起来。"
+      ],
+      leaks: [
+        "热度领先于交付，承诺多过能力边界。",
+        "被情绪与机会推着走，预算和精力容易失控。",
+        "重曝光、轻沉淀，流量没有变成长期资产。"
+      ],
+      paths: [
+        { name: "个人品牌与内容", desc: "围绕真实专长持续表达，让信任先于成交发生。" },
+        { name: "营销、增长与创意", desc: "帮产品找到被看见的方式，用策划与传播制造增长。" },
+        { name: "趋势型项目与课程", desc: "在窗口期快速集结资源，把新鲜认知变成可交付的体验。" }
+      ],
+      partner: "你需要一个能接住流量、让交付稳定的人。土稳住交付，金提高客单，水延长热度。",
+      note: "火，主照亮、表达与势能。你的财气不在等待被发现，而在把光打在对的地方。",
+      seed: "以表达、影响力和窗口感"
+    },
+    "土": {
+      name: "厚土者",
+      en: "THE STEADY BUILDER",
+      color: "#8D6943",
+      deep: "#5F4527",
+      soft: "#EDE1D1",
+      bright: "#D7BE96",
+      motto: "把小事做成系统，让稳定变成一种复利。",
+      summary: "你相信稳定不是保守，而是把偶然变成可重复。你愿意把小事做细，把现金流守住，让财富有地基。",
+      long: "你对落地、成本和长期承诺有耐心，不喜欢把生活押在不可控的运气上。你擅长把一件事跑成流程，把一次交付做成口碑。实体经营、运营、供应链和长期服务都很适合你。要小心的是，别把“稳”变成“不动”：当底盘已经足够扎实，适度尝试新的入口，会让你的世界更大。",
+      strengths: [
+        "能把细碎的事情跑成稳定流程，让人放心。",
+        "对成本、现金流和风险边界有天然警觉。",
+        "愿意长期守信用，靠交付积累复购与口碑。"
+      ],
+      leaks: [
+        "过度求稳，错过本来可以小成本尝试的窗口。",
+        "重投入、重资产，忽略现金回收周期。",
+        "凡事亲力亲为，迟迟不建立系统和团队。"
+      ],
+      paths: [
+        { name: "稳健经营与供应链", desc: "把产品、门店或服务流程做扎实，用复购与效率取胜。" },
+        { name: "运营、项目管理与交付", desc: "替别人把复杂的事落地，成为不可替代的稳定支点。" },
+        { name: "会员制与长期服务", desc: "用持续陪伴和可预期的服务，积累稳定现金流。" }
+      ],
+      partner: "你需要一个能带来新机会、帮你打破惯性的人。水带来流动，火点燃声量，木提供长期愿景。",
+      note: "土，主承载、稳定与积累。你的财气不在快，而在稳得住、算得清。",
+      seed: "以流程、交付和稳定现金流"
+    }
+  };
+
+  var AXIS_META = {
+    "洞察": { en: "INSIGHT", short: "看懂需求与价值" },
+    "行动": { en: "ACTION", short: "把想法推到交付" },
+    "连接": { en: "CONNECTION", short: "让关系与影响做功" },
+    "守成": { en: "STEADINESS", short: "守住节奏与成果" }
+  };
+
+  var QUESTIONS = [
+    {
+      act: 0,
+      prompt: "如果突然多出一笔完全可自由支配的 10 万元，你的第一反应更像哪一种？",
+      help: "别想“应该”，选第一反应。",
+      options: [
+        { text: "先放进安稳账户，算清楚多久能稳稳滚到下一个目标。", e: ["金", "土"], axes: ["守成", "洞察"] },
+        { text: "报一门想学很久的课，把专业能力再升一级。", e: ["木", "金"], axes: ["行动", "洞察"] },
+        { text: "约懂行的朋友吃饭，聊聊最近哪里有机会。", e: ["水", "火"], axes: ["连接", "洞察"] },
+        { text: "做个小产品或内容试试，让更多人认识我。", e: ["火", "水"], axes: ["行动", "连接"] }
+      ]
+    },
+    {
+      act: 0,
+      prompt: "判断一件事“能不能赚钱”，你最先看什么？",
+      help: "先选你的直觉，再看它是否和你的经验一致。",
+      options: [
+        { text: "有没有人已经为它付过钱，复购率高不高。", e: ["金", "土"], axes: ["洞察", "守成"] },
+        { text: "需求会不会长期变大，三五年后是否仍然成立。", e: ["木", "水"], axes: ["洞察", "守成"] },
+        { text: "我能不能拿到稀缺信息，或链接到关键的人。", e: ["水", "火"], axes: ["连接", "洞察"] },
+        { text: "我能不能稳定交付，并且算得过这笔账。", e: ["土", "金"], axes: ["守成", "行动"] }
+      ]
+    },
+    {
+      act: 0,
+      prompt: "朋友做副业，已经稳定月入两万。你更可能先做什么？",
+      help: "",
+      options: [
+        { text: "研究成本结构和利润率，判断值不值得复制。", e: ["金", "土"], axes: ["洞察", "守成"] },
+        { text: "自己用最小成本试一个月，跑通流程再决定。", e: ["木", "金"], axes: ["行动", "洞察"] },
+        { text: "想清楚差异化，看看能不能做出更大的声量。", e: ["火", "水"], axes: ["洞察", "连接"] },
+        { text: "约朋友深聊流程和资源，看能不能稳定合作。", e: ["土", "水"], axes: ["连接", "守成"] }
+      ]
+    },
+    {
+      act: 0,
+      prompt: "下面哪句话，最接近你对“钱”的理解？",
+      help: "没有标准答案，选最像你真实想法的那一句。",
+      options: [
+        { text: "钱是价值的刻度。专业越稀缺、标准越高，越有定价权。", e: ["金", "土"], axes: ["洞察", "守成"] },
+        { text: "钱是流动的水。信息、需求和信任在交汇处，就会冒出机会。", e: ["水", "火"], axes: ["连接", "洞察"] },
+        { text: "钱是被看见后的回响。注意力在哪里，价值就更容易被兑现。", e: ["火", "水"], axes: ["连接", "行动"] },
+        { text: "钱是时间的果实。稳稳积累，比一时爆发更重要。", e: ["土", "木"], axes: ["守成", "洞察"] }
+      ]
+    },
+    {
+      act: 1,
+      prompt: "哪一类赚钱活动，最容易让你忘记时间？",
+      help: "",
+      options: [
+        { text: "打磨一个作品、技术或方案，把品质做到自己满意。", e: ["金", "土"], axes: ["行动", "守成"] },
+        { text: "从零养一个账号、产品或社群，看它一点点长大。", e: ["木", "金"], axes: ["行动", "洞察"] },
+        { text: "在人和资源之间撮合，谈出一个双方都满意的方案。", e: ["水", "火"], axes: ["连接", "行动"] },
+        { text: "策划内容或活动，让很多人注意到，并愿意行动。", e: ["火", "木"], axes: ["连接", "行动"] }
+      ]
+    },
+    {
+      act: 1,
+      prompt: "一个超出当前能力、但很有吸引力的项目找上门，你会？",
+      help: "",
+      options: [
+        { text: "先拆需求、找资料，做一个小样，再决定接不接。", e: ["木", "金"], axes: ["行动", "洞察"] },
+        { text: "找擅长的人组队，我负责整合资源和推进交付。", e: ["水", "土"], axes: ["连接", "行动"] },
+        { text: "先评估最坏结果和现金流，能承受才接。", e: ["土", "金"], axes: ["守成", "洞察"] },
+        { text: "先把价格、范围和边界谈清楚，再决定投入多少。", e: ["金", "土"], axes: ["守成", "行动"] }
+      ]
+    },
+    {
+      act: 1,
+      prompt: "同样做自由职业，你更可能选择哪一种模式？",
+      help: "",
+      options: [
+        { text: "做高客单专家，一年只深度服务少量客户。", e: ["金", "土"], axes: ["守成", "行动"] },
+        { text: "做可复制的内容、课程或模板，让它慢慢长成资产。", e: ["木", "金"], axes: ["行动", "洞察"] },
+        { text: "做个人品牌，用影响力持续吸引合作。", e: ["火", "水"], axes: ["连接", "行动"] },
+        { text: "做小而稳的团队与流程，靠系统持续接单。", e: ["土", "金"], axes: ["守成", "行动"] }
+      ]
+    },
+    {
+      act: 1,
+      prompt: "赚到第一笔真正意义上的“小钱”后，你最想先做什么？",
+      help: "",
+      options: [
+        { text: "升级工具和作品，把下一次的报价抬高一档。", e: ["金", "土"], axes: ["行动", "洞察"] },
+        { text: "请客、进圈，认识能带来新机会的人。", e: ["水", "火"], axes: ["连接", "洞察"] },
+        { text: "投入表达和曝光，让更多人主动找上门。", e: ["火", "水"], axes: ["连接", "行动"] },
+        { text: "把安全垫和长期账户搭起来，先让钱稳下来。", e: ["土", "金"], axes: ["守成", "洞察"] }
+      ]
+    },
+    {
+      act: 2,
+      prompt: "在一个临时组成的小团队里，你通常会自然成为？",
+      help: "",
+      options: [
+        { text: "定标准、把品质和报价的人。", e: ["金", "土"], axes: ["行动", "守成"] },
+        { text: "把大家的长处串起来，让合作顺畅的人。", e: ["木", "土"], axes: ["连接", "行动"] },
+        { text: "找资源、谈合作、打通卡点的人。", e: ["水", "火"], axes: ["连接", "行动"] },
+        { text: "提供想法、点燃气氛，让方案被看见的人。", e: ["火", "木"], axes: ["洞察", "连接"] }
+      ]
+    },
+    {
+      act: 2,
+      prompt: "有人当面质疑你的方案，你的第一反应更接近？",
+      help: "",
+      options: [
+        { text: "拿数据和案例说话，愿意修正，但不轻易改方向。", e: ["金", "土"], axes: ["洞察", "守成"] },
+        { text: "先问清对方的顾虑，再一起找更好的解法。", e: ["木", "水"], axes: ["连接", "洞察"] },
+        { text: "不急着争，先拉关键人做一个小范围验证。", e: ["水", "土"], axes: ["连接", "行动"] },
+        { text: "直接做个小试验，让结果替我回答。", e: ["土", "金"], axes: ["行动", "洞察"] }
+      ]
+    },
+    {
+      act: 2,
+      prompt: "哪一种关系，最容易让你持续赚到钱？",
+      help: "",
+      options: [
+        { text: "长期客户认可你的专业价值，省心又有复购。", e: ["金", "土"], axes: ["守成", "洞察"] },
+        { text: "一起成长、互相推荐的同路人。", e: ["木", "水"], axes: ["连接", "行动"] },
+        { text: "愿意信任你判断、持续跟随你的受众。", e: ["火", "木"], axes: ["连接", "洞察"] },
+        { text: "分工清楚、交付稳定的合作伙伴。", e: ["土", "金"], axes: ["守成", "行动"] }
+      ]
+    },
+    {
+      act: 2,
+      prompt: "如果半年内要把收入翻倍，你会优先动哪一步？",
+      help: "",
+      options: [
+        { text: "把最值钱的技能练到区域前 20%，然后涨价。", e: ["金", "土"], axes: ["行动", "洞察"] },
+        { text: "拓新渠道、新合作方，把信息差和机会做大。", e: ["水", "火"], axes: ["连接", "洞察"] },
+        { text: "提升表达和曝光，让更多人主动找来。", e: ["火", "水"], axes: ["连接", "行动"] },
+        { text: "搭一套可复制的流程，减少业务对我的依赖。", e: ["土", "金"], axes: ["守成", "行动"] }
+      ]
+    },
+    {
+      act: 3,
+      prompt: "面对一个可能赚大钱、但结果很不确定的机会，你会怎么处理？",
+      help: "选你更可能真正采取的做法，而不是最理想的做法。",
+      options: [
+        { text: "用最小可行版本先跑两周，用结果决定加不加码。", e: ["木", "金"], axes: ["行动", "洞察"] },
+        { text: "找一位互补的合伙人分摊风险，一起把盘子做大。", e: ["水", "火"], axes: ["连接", "行动"] },
+        { text: "相信直觉，抓住窗口期，先全力试一次。", e: ["火", "木"], axes: ["行动", "洞察"] },
+        { text: "先设止损线，只拿亏得起的钱试水。", e: ["土", "金"], axes: ["守成", "洞察"] }
+      ]
+    },
+    {
+      act: 3,
+      prompt: "一笔计划外的奖金到账，你更可能怎么用？",
+      help: "",
+      options: [
+        { text: "报课、买书，升级一项能长期增值的能力。", e: ["木", "土"], axes: ["行动", "洞察"] },
+        { text: "请重要的人吃饭，聊聊彼此的新计划。", e: ["水", "火"], axes: ["连接", "洞察"] },
+        { text: "做一次小分享或小发布，让更多人看见你。", e: ["火", "木"], axes: ["连接", "行动"] },
+        { text: "转入长期账户，就当这笔钱没来过。", e: ["土", "金"], axes: ["守成", "行动"] }
+      ]
+    },
+    {
+      act: 3,
+      prompt: "收入突然出现波动时，你的第一反应更像？",
+      help: "",
+      options: [
+        { text: "拆解波动原因，调整产品或定价。", e: ["木", "金"], axes: ["洞察", "行动"] },
+        { text: "主动约人聊合作，寻找新的收入入口。", e: ["水", "火"], axes: ["连接", "行动"] },
+        { text: "把焦虑转成输出，边做边找回状态。", e: ["火", "木"], axes: ["行动", "洞察"] },
+        { text: "先盘点现金流，把必要开支锁住。", e: ["土", "金"], axes: ["守成", "行动"] }
+      ]
+    },
+    {
+      act: 3,
+      prompt: "你理想中的财富节奏，更像下面哪一种？",
+      help: "",
+      options: [
+        { text: "一条稳定上升的线，靠专业和定价慢慢抬升。", e: ["金", "土"], axes: ["守成", "洞察"] },
+        { text: "一片慢慢长大的森林，前期慢，后期复利。", e: ["木", "金"], axes: ["守成", "行动"] },
+        { text: "一张不断延伸的网，机会从连接中涌现。", e: ["水", "火"], axes: ["连接", "洞察"] },
+        { text: "一串高光烟火，集中抓住几个窗口期。", e: ["火", "水"], axes: ["行动", "洞察"] }
+      ]
+    },
+    {
+      act: 4,
+      prompt: "五行小剧场：如果要在自家院子里添一样东西，你会选？",
+      help: "凭第一眼意象选择，不用考虑实际用途。",
+      options: [
+        { text: "一棵老树：慢慢长高，年年成荫。", e: ["木", "水"], axes: ["守成", "行动"] },
+        { text: "一口古井：安静蓄水，随时可取。", e: ["水", "土"], axes: ["守成", "洞察"] },
+        { text: "一盏石灯：夜晚亮起，为来客照路。", e: ["火", "金"], axes: ["连接", "行动"] },
+        { text: "一块良田：四季耕作，稳定收成。", e: ["土", "木"], axes: ["守成", "行动"] },
+        { text: "一枚铜锁：守住门庭与珍贵之物。", e: ["金", "土"], axes: ["守成", "洞察"] }
+      ]
+    },
+    {
+      act: 4,
+      prompt: "最后一问：如果只能优先守住一种财富状态，你会选？",
+      help: "没有对错，选你此刻最想守住的。",
+      options: [
+        { text: "选择权：随时可以对不喜欢的事说不。", e: ["金", "土"], axes: ["守成", "洞察"] },
+        { text: "成长性：一直在变成更值钱的自己。", e: ["木", "金"], axes: ["行动", "洞察"] },
+        { text: "流动性：哪里有机会，都能灵活转身。", e: ["水", "火"], axes: ["连接", "行动"] },
+        { text: "影响力：你的名字本身就能带来机会。", e: ["火", "水"], axes: ["连接", "洞察"] },
+        { text: "安全感：有房有粮，有稳定的现金流。", e: ["土", "木"], axes: ["守成", "行动"] }
+      ]
+    }
+  ];
+
+  var SECONDARY_USE = {
+    "金": "把副财性用在“定价与筛选”上：给服务分层、公开价格、拒绝不合适的单子。",
+    "木": "把副财性用在“长期资产”上：选择一个可以持续积累的内容、产品或用户关系。",
+    "水": "把副财性用在“入口”上：主动进入高质量圈子，让信息与合作先流经你。",
+    "火": "把副财性用在“被看见”上：把已经做出来的结果讲清楚，让价值先出圈。",
+    "土": "把副财性用在“收口”上：建预算、设止损线、留安全垫，让赚到的钱留下来。"
+  };
+
+  var TYPE_ACTIONS = {
+    "金": {
+      title: "做一份三档报价",
+      text: "选一项你最拿手的服务，列出入门、标准、深度三档报价和交付边界。先发给 3 位老客户或熟人，请他们指出哪一档最想买、哪里还不清楚。"
+    },
+    "木": {
+      title: "设一个 30 天里程碑",
+      text: "把正在学或正在做的一件事拆成一个 30 天里程碑，只保留一个最重要的产出。公开记录进度，并找到 5 个真实用户愿意持续关注或反馈。"
+    },
+    "水": {
+      title: "约三次有主题的对话",
+      text: "列出 10 位你认识但久未联系的人，本周约其中 3 位聊 30 分钟。带着一个具体问题和一项你能提供的帮助去，不做无目的社交。"
+    },
+    "火": {
+      title: "发布一条案例内容",
+      text: "挑一个你解决过的问题，写成一条有过程、有结果的案例内容，72 小时内发布。结尾只放一个明确行动入口，然后记录谁真的来问了。"
+    },
+    "土": {
+      title: "做一张现金流底图",
+      text: "把过去三个月的收入与支出记进一张表，算出固定成本、平均回款周期和三个月安全垫目标。先看清底盘，再谈扩展。"
+    }
+  };
+
+  var AXIS_ACTIONS = {
+    "洞察": {
+      title: "做 5 次付费证据访谈",
+      text: "找 5 位目标用户，问他们最近一次为同类需求花了多少钱、为什么选它。先别问“你会不会买”，只听已经发生的行为。"
+    },
+    "行动": {
+      title: "启动 72 小时小实验",
+      text: "把想法缩成一个人也能完成的最小版本，写清开始与停止条件。72 小时内做出来，邀请 3 个人试用并给出一个具体反馈。"
+    },
+    "连接": {
+      title: "主动发起三次互补对话",
+      text: "约 3 位与你能力互补的人聊 30 分钟，带着一个具体问题和一个可提供的帮助。聊完各记录一条可以继续推进的下一步。"
+    },
+    "守成": {
+      title: "先设两个数字",
+      text: "写下每月先存下的比例，以及你单次尝试能承受的最大损失。超过任一数字就不加码；把规则放在看得见的地方。"
+    }
+  };
+
+  var RISK_READINGS = {
+    "木": {
+      label: "小步验证型",
+      title: "把最大不确定写成一句话",
+      text: "用两周验证你方案里最没把握的假设。提前写下“出现什么信号就继续、什么情况就停止”，然后按条件执行。"
+    },
+    "水": {
+      label: "借力分担型",
+      title: "先写清合作的三行字",
+      text: "找搭档前，把分工、分钱、退出各写一行，双方确认后再开始。交情不能代替边界，先小人后君子。"
+    },
+    "火": {
+      label: "窗口冲刺型",
+      title: "给冲动加一道冷静期",
+      text: "任何需要借钱或动用必要生活费的决定，先放 24 小时。把“怕错过”写下来，再问自己：错过了最坏会怎样？"
+    },
+    "土": {
+      label: "边界先行型",
+      title: "先算最坏，再决定入场",
+      text: "把最坏情况折算成具体金额和恢复时间。如果这笔损失会影响生活，就换一个小十倍的试法，而不是硬扛。"
+    }
+  };
+
+  var KEY_CHOICES = [
+    {
+      index: 1,
+      label: "判断机会",
+      summaries: {
+        "金": "先看真实付费与复购",
+        "木": "先看长期需求",
+        "水": "先看信息与关键连接",
+        "土": "先看交付与算账"
+      }
+    },
+    {
+      index: 12,
+      label: "面对不确定",
+      summaries: {
+        "木": "小步验证，再决定加码",
+        "水": "找互补伙伴分担风险",
+        "火": "抓住窗口期先冲刺",
+        "土": "先设止损边界"
+      }
+    },
+    {
+      index: 17,
+      label: "最想守住",
+      summaries: {
+        "金": "选择权",
+        "木": "成长性",
+        "水": "流动性",
+        "火": "影响力",
+        "土": "安全感"
+      }
+    }
+  ];
+
+  var GENERATES = { "木": "火", "火": "土", "土": "金", "金": "水", "水": "木" };
+  var CONTROLS = { "木": "土", "土": "水", "水": "火", "火": "金", "金": "木" };
+
+  /* =========================================================
+     状态与 DOM
+     ========================================================= */
+
+  var answers = new Array(18).fill(null);
+  var currentIndex = 0;
+  var reviewMode = false;
+  var storageAvailable = true;
+  var toastTimer = null;
+
+  var dom = {
+    homeView: document.getElementById("homeView"),
+    quizView: document.getElementById("quizView"),
+    resultView: document.getElementById("resultView"),
+    homeBrand: document.getElementById("homeBrand"),
+    resumeStrip: document.getElementById("resumeStrip"),
+    resumeText: document.getElementById("resumeText"),
+    resumeContinue: document.getElementById("resumeContinue"),
+    resumeReset: document.getElementById("resumeReset"),
+    quizBrand: document.getElementById("quizBrand"),
+    exitQuizBtn: document.getElementById("exitQuizBtn"),
+    quizAct: document.getElementById("quizAct"),
+    quizCounter: document.getElementById("quizCounter"),
+    quizProgressText: document.getElementById("quizProgressText"),
+    saveStatus: document.getElementById("saveStatus"),
+    quizProgressBar: document.getElementById("quizProgressBar"),
+    quizProgressFill: document.getElementById("quizProgressFill"),
+    reviewBar: document.getElementById("reviewBar"),
+    reviewFinishBtn: document.getElementById("reviewFinishBtn"),
+    answerMap: document.getElementById("answerMap"),
+    quizCard: document.getElementById("quizCard"),
+    questionPanel: document.getElementById("questionPanel"),
+    answerHint: document.getElementById("answerHint"),
+    prevBtn: document.getElementById("prevBtn"),
+    nextBtn: document.getElementById("nextBtn"),
+    nextLabel: document.getElementById("nextLabel"),
+    resultBrand: document.getElementById("resultBrand"),
+    resultHomeTop: document.getElementById("resultHomeTop"),
+    resultHomeBtn: document.getElementById("resultHomeBtn"),
+    resultSeal: document.getElementById("resultSeal"),
+    resultElementLabel: document.getElementById("resultElementLabel"),
+    resultTitle: document.getElementById("resultTitle"),
+    resultMotto: document.getElementById("resultMotto"),
+    resultSummary: document.getElementById("resultSummary"),
+    resultKeywords: document.getElementById("resultKeywords"),
+    resultSecondary: document.getElementById("resultSecondary"),
+    resultTopAxis: document.getElementById("resultTopAxis"),
+    resultWeakAxis: document.getElementById("resultWeakAxis"),
+    resultSigil: document.getElementById("resultSigil"),
+    sigilChar: document.getElementById("sigilChar"),
+    sigilName: document.getElementById("sigilName"),
+    elementBars: document.getElementById("elementBars"),
+    axisBars: document.getElementById("axisBars"),
+    axisSummary: document.getElementById("axisSummary"),
+    pairMain: document.getElementById("pairMain"),
+    pairAux: document.getElementById("pairAux"),
+    pairType: document.getElementById("pairType"),
+    pairTitle: document.getElementById("pairTitle"),
+    pairText: document.getElementById("pairText"),
+    pairUse: document.getElementById("pairUse"),
+    resultLong: document.getElementById("resultLong"),
+    strengthList: document.getElementById("strengthList"),
+    leakList: document.getElementById("leakList"),
+    elementNote: document.getElementById("elementNote"),
+    elementNoteText: document.getElementById("elementNoteText"),
+    partnerNote: document.getElementById("partnerNote"),
+    pathGrid: document.getElementById("pathGrid"),
+    actionsList: document.getElementById("actionsList"),
+    keyChoices: document.getElementById("keyChoices"),
+    modifyBtn: document.getElementById("modifyBtn"),
+    resetDialog: document.getElementById("resetDialog"),
+    confirmReset: document.getElementById("confirmReset"),
+    toast: document.getElementById("toast")
+  };
+
+  /* =========================================================
+     工具函数
+     ========================================================= */
+
+  function pad2(number) {
+    return String(number).padStart(2, "0");
+  }
+
+  function countAnswered() {
+    return answers.reduce(function (count, value) {
+      return count + (value === null ? 0 : 1);
+    }, 0);
+  }
+
+  function isComplete() {
+    return answers.every(function (value) {
+      return value !== null;
+    });
+  }
+
+  function reduceMotion() {
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function jumpToTop() {
+    var root = document.documentElement;
+    var previousBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, 0);
+    root.style.scrollBehavior = previousBehavior;
+  }
+
+  function showToast(message) {
+    if (!dom.toast) {
+      return;
+    }
+    window.clearTimeout(toastTimer);
+    dom.toast.textContent = message;
+    dom.toast.classList.add("is-visible");
+    toastTimer = window.setTimeout(function () {
+      dom.toast.classList.remove("is-visible");
+    }, 3200);
+  }
+
+  function testStorage() {
+    try {
+      var testKey = STORAGE_KEY + ".probe";
+      window.localStorage.setItem(testKey, "1");
+      window.localStorage.removeItem(testKey);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function saveState() {
+    if (!storageAvailable) {
+      updateSaveStatus();
+      return;
+    }
+    if (countAnswered() === 0) {
+      try {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } catch (error) {
+        storageAvailable = false;
+      }
+      updateSaveStatus();
+      return;
+    }
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          version: 1,
+          answers: answers,
+          currentIndex: currentIndex,
+          reviewMode: reviewMode,
+          updatedAt: Date.now()
+        })
+      );
+      storageAvailable = true;
+    } catch (error) {
+      storageAvailable = false;
+    }
+    updateSaveStatus();
+  }
+
+  function restoreState() {
+    if (!storageAvailable) {
+      return;
+    }
+    var raw = null;
+    try {
+      raw = window.localStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+      storageAvailable = false;
+      return;
+    }
+    if (!raw) {
+      return;
+    }
+    try {
+      var parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.answers) || parsed.answers.length !== QUESTIONS.length) {
+        return;
+      }
+      var restored = new Array(QUESTIONS.length).fill(null);
+      var hasAnswer = false;
+      for (var i = 0; i < QUESTIONS.length; i += 1) {
+        var value = parsed.answers[i];
+        if (
+          Number.isInteger(value) &&
+          value >= 0 &&
+          value < QUESTIONS[i].options.length
+        ) {
+          restored[i] = value;
+          hasAnswer = true;
+        }
+      }
+      if (!hasAnswer) {
+        return;
+      }
+      answers = restored;
+      currentIndex = Number.isInteger(parsed.currentIndex)
+        ? Math.max(0, Math.min(QUESTIONS.length - 1, parsed.currentIndex))
+        : 0;
+      reviewMode = Boolean(parsed.reviewMode) && isComplete();
+    } catch (error) {
+      /* 损坏的本地数据不阻塞页面，直接从空状态开始。 */
+    }
+  }
+
+  function clearStoredState() {
+    try {
+      window.localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      storageAvailable = false;
+    }
+  }
+
+  function updateSaveStatus() {
+    if (!dom.saveStatus) {
+      return;
+    }
+    var message = storageAvailable ? "答案自动保存在本机" : "本地保存不可用";
+    dom.saveStatus.innerHTML =
+      '<svg aria-hidden="true"><use href="#i-lock"></use></svg><span>' + message + "</span>";
+    dom.saveStatus.title = storageAvailable
+      ? "作答仅保存在当前浏览器，不会上传。"
+      : "当前浏览器未允许本地保存，离开页面后作答可能丢失。";
+  }
+
+  function showView(name) {
+    dom.homeView.hidden = name !== "home";
+    dom.quizView.hidden = name !== "quiz";
+    dom.resultView.hidden = name !== "result";
+    document.body.dataset.view = name;
+    jumpToTop();
+    if (name === "home") {
+      document.title = "你适合发什么财？｜五行财性测评";
+    }
+  }
+
+  function updateProgressUI() {
+    var answered = countAnswered();
+    var percent = (answered / QUESTIONS.length) * 100;
+    dom.quizProgressFill.style.width = percent + "%";
+    dom.quizProgressText.textContent = answered + " / " + QUESTIONS.length;
+    dom.quizProgressBar.setAttribute("aria-valuenow", String(answered));
+    dom.quizProgressBar.setAttribute("aria-valuetext", "已完成 " + answered + " 题，共 " + QUESTIONS.length + " 题");
+    updateSaveStatus();
+  }
+
+  function setAnswerHint(message) {
+    if (!dom.answerHint) {
+      return;
+    }
+    var textTarget = dom.answerHint.querySelector("p");
+    if (textTarget) {
+      textTarget.textContent = message;
+    }
+    dom.answerHint.hidden = false;
+  }
+
+  function hideAnswerHint() {
+    if (dom.answerHint) {
+      dom.answerHint.hidden = true;
+    }
+  }
+
+  /* =========================================================
+     首页状态与导航
+     ========================================================= */
+
+  function updateHomeState() {
+    var answered = countAnswered();
+    var complete = answered === QUESTIONS.length;
+    var any = answered > 0;
+
+    var longLabel = complete
+      ? "查看我的财性结果"
+      : any
+        ? "继续上次测评"
+        : "开始探索我的财性";
+
+    document.querySelectorAll(".start-label").forEach(function (label) {
+      label.textContent = longLabel;
+    });
+
+    var headerLabel = document.querySelector(".header-start-label");
+    if (headerLabel) {
+      headerLabel.textContent = complete ? "查看结果" : any ? "继续答题" : "开始测评";
+    }
+
+    dom.resumeStrip.hidden = !any;
+    if (!any) {
+      return;
+    }
+
+    if (complete) {
+      dom.resumeText.innerHTML =
+        "上次的 <strong>18</strong> 个答案已保存在本机，可以查看最新结果。";
+      dom.resumeContinue.textContent = "看结果";
+    } else {
+      dom.resumeText.innerHTML =
+        "上次停在第 <strong>" + pad2(currentIndex + 1) + "</strong> 题，已完成 <strong>" + answered + "</strong> / 18。";
+      dom.resumeContinue.textContent = "继续";
+    }
+
+    if (!storageAvailable) {
+      dom.resumeText.insertAdjacentHTML("beforeend", " <span style=\"color:var(--red-dark)\">本地保存不可用，刷新后会丢失。</span>");
+    }
+  }
+
+  function handleStart() {
+    var answered = countAnswered();
+    if (answered === QUESTIONS.length) {
+      revealResultFromAnswers();
+      return;
+    }
+    if (answered > 0) {
+      reviewMode = false;
+      saveState();
+      showQuiz();
+      return;
+    }
+    startFreshQuiz();
+  }
+
+  function startFreshQuiz() {
+    answers = new Array(QUESTIONS.length).fill(null);
+    currentIndex = 0;
+    reviewMode = false;
+    clearStoredState();
+    showQuiz();
+  }
+
+  function showQuiz() {
+    if (currentIndex < 0 || currentIndex >= QUESTIONS.length) {
+      currentIndex = 0;
+    }
+    showView("quiz");
+    renderQuiz();
+  }
+
+  function exitQuiz() {
+    var answered = countAnswered();
+    saveState();
+    showView("home");
+    updateHomeState();
+    if (answered === 0) {
+      showToast("还没有作答记录，随时可以重新开始。");
+    } else if (storageAvailable) {
+      showToast("进度已保存在本机，下次可以继续。");
+    } else {
+      showToast("浏览器未允许本地保存，离开后本次进度可能丢失。");
+    }
+  }
+
+  function goHomeFromResult() {
+    saveState();
+    showView("home");
+    updateHomeState();
+  }
+
+  function enterReviewMode() {
+    if (!isComplete()) {
+      return;
+    }
+    reviewMode = true;
+    currentIndex = 0;
+    saveState();
+    showQuiz();
+  }
+
+  function scrollToSection(id) {
+    var section = document.getElementById(id);
+    if (!section) {
+      return;
+    }
+    section.scrollIntoView({
+      behavior: reduceMotion() ? "auto" : "smooth",
+      block: "start"
+    });
+  }
+
+  /* =========================================================
+     答题渲染与交互
+     ========================================================= */
+
+  function renderQuiz() {
+    var question = QUESTIONS[currentIndex];
+    var selected = answers[currentIndex];
+    var act = ACTS[question.act];
+    var help = question.help || "选更像你平时会做的那一个，不必选“最正确”的那一个。";
+
+    dom.quizAct.textContent = act.name;
+    dom.quizCounter.textContent = "第 " + pad2(currentIndex + 1) + " 题 / 共 " + QUESTIONS.length + " 题";
+    document.title = "第 " + pad2(currentIndex + 1) + " 题 · 五行财性测评";
+    dom.quizCard.classList.remove("is-nudged");
+    hideAnswerHint();
+
+    var optionsHtml = question.options
+      .map(function (option, index) {
+        var checked = selected === index;
+        var tabIndex = checked || (selected === null && index === 0) ? 0 : -1;
+        return (
+          '<button class="option" type="button" role="radio" aria-checked="' + checked + '"' +
+          ' data-option-index="' + index + '" tabindex="' + tabIndex + '">' +
+          '<span class="option-letter" aria-hidden="true">' + LETTERS[index] + "</span>" +
+          '<span class="option-text">' + option.text + "</span>" +
+          '<span class="option-check" aria-hidden="true"></span>' +
+          "</button>"
+        );
+      })
+      .join("");
+
+    dom.questionPanel.innerHTML =
+      '<div class="question-panel">' +
+      '<p class="question-kicker">SCENE ' + pad2(currentIndex + 1) + "</p>" +
+      '<h2 class="question-title" id="questionTitle" tabindex="-1">' + question.prompt + "</h2>" +
+      '<p class="question-help" id="questionHelp">' + help + "</p>" +
+      '<div class="options" id="optionsGroup" role="radiogroup" aria-labelledby="questionTitle" aria-describedby="questionHelp">' +
+      optionsHtml +
+      "</div>" +
+      "</div>";
+
+    updateProgressUI();
+    updateControlLabels();
+
+    dom.reviewBar.hidden = !reviewMode;
+    dom.answerMap.hidden = !reviewMode;
+    if (reviewMode) {
+      renderAnswerMap();
+    } else {
+      dom.answerMap.innerHTML = "";
+    }
+
+    window.requestAnimationFrame(function () {
+      var title = document.getElementById("questionTitle");
+      if (title) {
+        title.focus({ preventScroll: true });
+      }
+      jumpToTop();
+    });
+  }
+
+  function renderAnswerMap() {
+    dom.answerMap.innerHTML = QUESTIONS.map(function (question, index) {
+      var isCurrent = index === currentIndex;
+      var answered = answers[index] !== null;
+      return (
+        '<button class="map-btn' + (answered ? " is-answered" : "") + (isCurrent ? " is-current" : "") + '"' +
+        ' type="button" data-question-index="' + index + '"' +
+        (isCurrent ? ' aria-current="step"' : "") +
+        ' aria-label="第 ' + (index + 1) + " 题，" + (answered ? "已作答" : "未作答") + (isCurrent ? "，当前题" : "") + '">' +
+        pad2(index + 1) +
+        "</button>"
+      );
+    }).join("");
+  }
+
+  function updateControlLabels() {
+    dom.prevBtn.disabled = currentIndex === 0;
+    if (currentIndex === QUESTIONS.length - 1) {
+      dom.nextLabel.textContent = reviewMode ? "重新生成结果" : "生成我的结果";
+    } else {
+      dom.nextLabel.textContent = "下一题";
+    }
+  }
+
+  function refreshOptionSelection() {
+    var selected = answers[currentIndex];
+    var buttons = dom.questionPanel.querySelectorAll(".option");
+    buttons.forEach(function (button, index) {
+      var checked = index === selected;
+      button.setAttribute("aria-checked", String(checked));
+      button.tabIndex = checked || (selected === null && index === 0) ? 0 : -1;
+    });
+  }
+
+  function selectAnswer(optionIndex) {
+    if (!Number.isInteger(optionIndex)) {
+      return;
+    }
+    if (optionIndex < 0 || optionIndex >= QUESTIONS[currentIndex].options.length) {
+      return;
+    }
+    answers[currentIndex] = optionIndex;
+    saveState();
+    refreshOptionSelection();
+    hideAnswerHint();
+    updateProgressUI();
+  }
+
+  function nudgeUnanswered(message) {
+    setAnswerHint(message || "还没选哦。选一个更像你的答案，再继续。");
+    dom.quizCard.classList.remove("is-nudged");
+    void dom.quizCard.offsetWidth;
+    dom.quizCard.classList.add("is-nudged");
+    var firstOption = dom.questionPanel.querySelector(".option");
+    if (firstOption) {
+      firstOption.focus({ preventScroll: false });
+    }
+  }
+
+  function goNext() {
+    if (answers[currentIndex] === null) {
+      nudgeUnanswered();
+      return;
+    }
+    if (currentIndex < QUESTIONS.length - 1) {
+      currentIndex += 1;
+      saveState();
+      renderQuiz();
+      return;
+    }
+    finishQuiz();
+  }
+
+  function goPrevious() {
+    if (currentIndex === 0) {
+      return;
+    }
+    currentIndex -= 1;
+    saveState();
+    renderQuiz();
+  }
+
+  function jumpToQuestion(index) {
+    if (!reviewMode) {
+      return;
+    }
+    if (!Number.isInteger(index) || index < 0 || index >= QUESTIONS.length) {
+      return;
+    }
+    currentIndex = index;
+    saveState();
+    renderQuiz();
+  }
+
+  function findFirstMissing() {
+    for (var i = 0; i < answers.length; i += 1) {
+      if (answers[i] === null) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  function finishQuiz() {
+    var missing = findFirstMissing();
+    if (missing !== -1) {
+      currentIndex = missing;
+      saveState();
+      renderQuiz();
+      nudgeUnanswered("还有题目没有作答，已经带你来到第 " + (missing + 1) + " 题。");
+      return;
+    }
+    revealResultFromAnswers();
+  }
+
+  function handleOptionKeydown(event) {
+    var option = event.target.closest(".option");
+    if (!option) {
+      return;
+    }
+    var buttons = Array.prototype.slice.call(dom.questionPanel.querySelectorAll(".option"));
+    var current = buttons.indexOf(option);
+    if (current === -1) {
+      return;
+    }
+    var next = null;
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+      next = (current + 1) % buttons.length;
+    } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+      next = (current - 1 + buttons.length) % buttons.length;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = buttons.length - 1;
+    }
+    if (next === null) {
+      return;
+    }
+    event.preventDefault();
+    var target = buttons[next];
+    target.focus();
+    selectAnswer(next);
+  }
+
+  /* =========================================================
+     计分
+     ========================================================= */
+
+  function tieRanks() {
+    var direct = {};
+    var auxiliary = {};
+    for (var i = QUESTIONS.length - 1; i >= 0; i -= 1) {
+      var option = getSelectedOption(i);
+      if (!option) {
+        continue;
+      }
+      if (direct[option.e[0]] === undefined) {
+        direct[option.e[0]] = i;
+      }
+      if (auxiliary[option.e[1]] === undefined) {
+        auxiliary[option.e[1]] = i;
+      }
+    }
+    var ranks = {};
+    ELEMENT_ORDER.forEach(function (element) {
+      if (direct[element] !== undefined) {
+        ranks[element] = 1000 + direct[element];
+      } else if (auxiliary[element] !== undefined) {
+        ranks[element] = 500 + auxiliary[element];
+      } else {
+        ranks[element] = 0;
+      }
+    });
+    return ranks;
+  }
+
+  function getSelectedOption(questionIndex) {
+    var optionIndex = answers[questionIndex];
+    if (optionIndex === null || !QUESTIONS[questionIndex]) {
+      return null;
+    }
+    return QUESTIONS[questionIndex].options[optionIndex] || null;
+  }
+
+  function distributePercentages(scores) {
+    var total = ELEMENT_ORDER.reduce(function (sum, element) {
+      return sum + scores[element];
+    }, 0);
+    var result = {};
+    if (total === 0) {
+      ELEMENT_ORDER.forEach(function (element) {
+        result[element] = 0;
+      });
+      return result;
+    }
+    var raw = ELEMENT_ORDER.map(function (element) {
+      var exact = (scores[element] / total) * 100;
+      return {
+        element: element,
+        exact: exact,
+        floor: Math.floor(exact),
+        fraction: exact - Math.floor(exact)
+      };
+    });
+    var used = raw.reduce(function (sum, item) {
+      return sum + item.floor;
+    }, 0);
+    raw.forEach(function (item) {
+      result[item.element] = item.floor;
+    });
+    var remainder = 100 - used;
+    var ranked = raw.slice().sort(function (a, b) {
+      return b.fraction - a.fraction || ELEMENT_ORDER.indexOf(a.element) - ELEMENT_ORDER.indexOf(b.element);
+    });
+    for (var i = 0; i < remainder; i += 1) {
+      result[ranked[i % ranked.length].element] += 1;
+    }
+    return result;
+  }
+
+  function calculateResult() {
+    var scores = {};
+    var axisScores = {};
+    ELEMENT_ORDER.forEach(function (element) {
+      scores[element] = 0;
+    });
+    AXIS_ORDER.forEach(function (axis) {
+      axisScores[axis] = 0;
+    });
+
+    QUESTIONS.forEach(function (question, index) {
+      var option = ANSWER_OPTION(index);
+      if (!option) {
+        return;
+      }
+      scores[option.e[0]] += 5;
+      scores[option.e[1]] += 1;
+      axisScores[option.axes[0]] += 1;
+      axisScores[option.axes[1]] += 1;
+    });
+
+    var rankByTie = tieRanks();
+    var sortedElements = ELEMENT_ORDER.slice().sort(function (a, b) {
+      return (
+        scores[b] - scores[a] ||
+        rankByTie[b] - rankByTie[a] ||
+        ELEMENT_ORDER.indexOf(a) - ELEMENT_ORDER.indexOf(b)
+      );
+    });
+    var sortedAxes = AXIS_ORDER.slice().sort(function (a, b) {
+      return axisScores[b] - axisScores[a] || AXIS_ORDER.indexOf(a) - AXIS_ORDER.indexOf(b);
+    });
+    var primary = sortedElements[0];
+    var secondary = sortedElements[1];
+    var topAxis = sortedAxes[0];
+    var weakAxis = sortedAxes[sortedAxes.length - 1];
+
+    var q13Option = ANSWER_OPTION(12);
+    var riskElement = q13Option ? q13Option.e[0] : primary;
+
+    return {
+      scores: scores,
+      percentages: distributePercentages(scores),
+      sortedElements: sortedElements,
+      axisScores: axisScores,
+      sortedAxes: sortedAxes,
+      primary: primary,
+      secondary: secondary,
+      topAxis: topAxis,
+      weakAxis: weakAxis,
+      riskElement: riskElement
+    };
+  }
+
+  function ANSWER_OPTION(index) {
+    return getSelectedOption(index);
+  }
+
+  /* =========================================================
+     结果生成
+     ========================================================= */
+
+  function getPairInfo(primary, secondary) {
+    var primaryMeta = ELEMENTS[primary];
+    var secondaryMeta = ELEMENTS[secondary];
+
+    if (GENERATES[primary] === secondary) {
+      return {
+        tag: "延展关系",
+        stamp: "相生相成",
+        title: primary + "生" + secondary + "：让主赛道，长出第二条路。",
+        text:
+          "在五行意象里，" + primary + "生" + secondary + "。你会不自觉地用主财性的方式，为副财性输送能量：这边刚积累出一点资源和口碑，那边就想去开一扇新门。好处是路越走越宽；要留意的是，别把资源铺得太散。给新方向设一个清晰的收口动作，再决定是否继续加码。"
+      };
+    }
+    if (GENERATES[secondary] === primary) {
+      return {
+        tag: "补给关系",
+        stamp: "相生相成",
+        title: secondary + "生" + primary + "：你的第二能力，正在为主赛道供能。",
+        text:
+          "在五行意象里，" + secondary + "生" + primary + "。副财性不是你的备选项，而是主赛道的燃料：" + secondaryMeta.seed + "，会让你更容易遇到" + primaryMeta.name + "需要的机会、信任或资源。把这种能力变成每周都会做的日常动作，而不是偶尔发挥，复利会更明显。"
+      };
+    }
+    if (CONTROLS[primary] === secondary) {
+      return {
+        tag: "杠杆关系",
+        stamp: "相制相成",
+        title: primary + "克" + secondary + "：用边界，把第二能力变成杠杆。",
+        text:
+          "在五行意象里，" + primary + "克" + secondary + "。你倾向于用规则、边界和效率去管理副财性的能量：它让你更有掌控感，也容易变成“只做确定性高的事”。把副财性当作一项可以练习的杠杆，而不是必须服从主赛道的工具；偶尔放松控制，反而能看见新入口。"
+      };
+    }
+    return {
+      tag: "校准关系",
+      stamp: "相制相成",
+      title: secondary + "克" + primary + "：让副财性，做你的校准器。",
+      text:
+        "在五行意象里，" + secondary + "克" + primary + "。副财性像一位严格但有用的搭档：它会在你最顺手的地方提醒你“还有别的可能”。不必把它当成阻力；用它的视角，为你的主赛道补一条边界或一个反脆弱方案。"
+    };
+  }
+
+  function setText(node, value) {
+    if (node) {
+      node.textContent = value;
+    }
+  }
+
+  function renderResult(result) {
+    var primary = result.primary;
+    var secondary = result.secondary;
+    var type = ELEMENTS[primary];
+    var auxType = ELEMENTS[secondary];
+    var pair = getPairInfo(primary, secondary);
+
+    dom.resultView.style.setProperty("--accent", type.color);
+    dom.resultView.style.setProperty("--accent-deep", type.deep);
+    dom.resultView.style.setProperty("--accent-soft", type.soft);
+    dom.resultView.style.setProperty("--accent-wash", type.bright);
+
+    dom.resultSeal.textContent = primary;
+    dom.resultElementLabel.textContent = "主财性 · " + primary + " / " + type.en;
+    dom.resultTitle.textContent = type.name;
+    dom.resultMotto.textContent = type.motto;
+    dom.resultSummary.textContent = type.summary;
+    dom.resultSecondary.textContent = secondary + " · " + auxType.name;
+    dom.resultTopAxis.textContent = result.topAxis;
+    dom.resultWeakAxis.textContent = result.weakAxis;
+
+    dom.resultKeywords.innerHTML = type.paths
+      .map(function (path) {
+        return "<span>" + path.name + "</span>";
+      })
+      .join("");
+
+    var nodes = dom.resultSigil.querySelectorAll(".sigil-node");
+    nodes.forEach(function (node) {
+      var element = node.getAttribute("data-el");
+      node.classList.toggle("is-primary", element === primary);
+      node.classList.toggle("is-secondary", element === secondary);
+      var role = node.querySelector(".sigil-role");
+      if (role) {
+        role.textContent = element === primary ? "主" : element === secondary ? "辅" : "";
+      }
+    });
+    dom.sigilChar.textContent = primary;
+    dom.sigilName.textContent = type.name + " · 主财性";
+
+    dom.elementBars.innerHTML = ELEMENT_ORDER.map(function (element) {
+      var meta = ELEMENTS[element];
+      var isPrimary = element === primary;
+      var isSecondary = element === secondary;
+      var role = isPrimary
+        ? '<span class="role-pill role-main">主</span>'
+        : isSecondary
+          ? '<span class="role-pill role-second">辅</span>'
+          : "";
+      return (
+        '<div class="element-row' + (isPrimary ? " el-primary" : "") + '"' +
+        ' style="--el:' + meta.color + ";--el-soft:" + meta.soft + '">' +
+        '<div class="element-label"><span class="el-char" aria-hidden="true">' + element + "</span>" +
+        '<span class="el-name">' + meta.name + "</span></div>" +
+        '<div class="element-track" aria-hidden="true"><span class="element-fill" style="--w:' +
+        result.percentages[element] +
+        '%"></span></div>' +
+        '<div class="element-value"><strong>' + result.percentages[element] + "%</strong>" + role + "</div>" +
+        "</div>"
+      );
+    }).join("");
+
+    dom.axisBars.innerHTML = AXIS_ORDER.map(function (axis) {
+      var score = result.axisScores[axis];
+      var width = (score / QUESTIONS.length) * 100;
+      return (
+        '<div class="axis-row">' +
+        '<div class="axis-label"><strong>' + axis + "</strong><small>" + AXIS_META[axis].short + "</small></div>" +
+        '<div class="axis-track" aria-hidden="true"><span class="axis-fill" style="--w:' + width + '%"></span></div>' +
+        '<div class="axis-score">' + score + '<small>/18</small></div>' +
+        "</div>"
+      );
+    }).join("");
+
+    dom.axisSummary.innerHTML =
+      "你最顺手的动作是<strong>「" + result.topAxis + "」</strong>：" + AXIS_META[result.topAxis].short +
+      "。目前相对最少被调用的是<strong>「" + result.weakAxis + "」</strong>：" + AXIS_META[result.weakAxis].short +
+      "。先补一个小动作，不用把它变成新的焦虑。";
+
+    dom.pairMain.textContent = primary;
+    dom.pairAux.textContent = secondary;
+    dom.pairMain.style.color = type.bright;
+    dom.pairAux.style.color = auxType.bright;
+    dom.pairMain.style.borderColor = type.bright + "66";
+    dom.pairAux.style.borderColor = auxType.bright + "66";
+    dom.pairMain.style.backgroundColor = type.bright + "12";
+    dom.pairAux.style.backgroundColor = auxType.bright + "12";
+    setText(dom.pairType, pair.tag);
+    setText(dom.pairTitle, pair.title);
+    setText(dom.pairText, pair.text);
+    setText(dom.pairUse, SECONDARY_USE[secondary]);
+
+    var stamp = dom.resultView.querySelector(".pair-stamp");
+    if (stamp) {
+      stamp.textContent = pair.stamp;
+    }
+
+    dom.resultLong.textContent = type.long;
+    dom.strengthList.innerHTML = type.strengths
+      .map(function (item) {
+        return "<li>" + item + "</li>";
+      })
+      .join("");
+    dom.leakList.innerHTML = type.leaks
+      .map(function (item) {
+        return "<li>" + item + "</li>";
+      })
+      .join("");
+    dom.elementNote.setAttribute("data-char", primary);
+    dom.elementNoteText.textContent = type.note;
+    dom.partnerNote.textContent = type.partner;
+
+    dom.pathGrid.innerHTML = type.paths
+      .map(function (path, index) {
+        return (
+          '<article class="path-card">' +
+          '<p class="path-no">' + pad2(index + 1) + " / PATH</p>" +
+          "<h3>" + path.name + "</h3>" +
+          "<p>" + path.desc + "</p>" +
+          "</article>"
+        );
+      })
+      .join("");
+
+    var risk = RISK_READINGS[result.riskElement] || RISK_READINGS["土"];
+    var actions = [
+      {
+        tag: "主财性动作 · 从今天开始",
+        title: TYPE_ACTIONS[primary].title,
+        text: TYPE_ACTIONS[primary].text
+      },
+      {
+        tag: "补强动作 · 未来 7 天",
+        title: AXIS_ACTIONS[result.weakAxis].title,
+        text: AXIS_ACTIONS[result.weakAxis].text
+      },
+      {
+        tag: "边界动作 · 下次机会来时",
+        title: risk.title,
+        text: risk.text
+      }
+    ];
+    dom.actionsList.innerHTML = actions
+      .map(function (action, index) {
+        return (
+          '<article class="action-item">' +
+          '<div><span class="action-tag">' + pad2(index + 1) + " · " + action.tag + "</span>" +
+          "<h3>" + action.title + "</h3></div>" +
+          "<p>" + action.text + "</p>" +
+          "</article>"
+        );
+      })
+      .join("");
+
+    dom.keyChoices.innerHTML = KEY_CHOICES.map(function (item, index) {
+      var option = getSelectedOption(item.index);
+      if (!option) {
+        return "";
+      }
+      var main = option.e[0];
+      var summary = item.summaries[main] || option.text;
+      return (
+        '<div class="key-choice">' +
+        '<span class="key-choice-no">' + pad2(index + 1) + "</span>" +
+        '<span class="key-choice-label">' + item.label + "</span>" +
+        '<span class="key-choice-value">' + summary + "</span>" +
+        "</div>"
+      );
+    }).join("");
+
+    var riskMeta = RISK_READINGS[result.riskElement];
+    if (riskMeta) {
+      var riskLabel = dom.resultView.querySelector(".result-kicker .small-pill");
+      if (riskLabel) {
+        riskLabel.title = "面对不确定时：你的倾向是" + riskMeta.label;
+      }
+    }
+  }
+
+  function revealResultFromAnswers() {
+    if (!isComplete()) {
+      var missing = findFirstMissing();
+      if (missing !== -1) {
+        currentIndex = missing;
+        reviewMode = true;
+        saveState();
+        showQuiz();
+        nudgeUnanswered("还差一题。补完这一题，就能生成结果。");
+      }
+      return;
+    }
+    reviewMode = false;
+    saveState();
+    var result = calculateResult();
+    renderResult(result);
+    document.title = "我的财性结果：" + result.primary + " · " + ELEMENTS[result.primary].name + "｜生财有方";
+    showView("result");
+    window.requestAnimationFrame(function () {
+      dom.resultTitle.setAttribute("tabindex", "-1");
+      dom.resultTitle.focus({ preventScroll: true });
+      jumpToTop();
+    });
+  }
+
+  /* =========================================================
+     弹窗与重置
+     ========================================================= */
+
+  function openResetDialog() {
+    if (!dom.resetDialog) {
+      return;
+    }
+    if (typeof dom.resetDialog.showModal === "function") {
+      if (!dom.resetDialog.open) {
+        dom.resetDialog.showModal();
+      }
+    } else if (window.confirm("清空本机答案并从第 1 题重新开始？")) {
+      resetAndStart();
+    }
+  }
+
+  function closeResetDialog() {
+    if (dom.resetDialog && dom.resetDialog.open) {
+      dom.resetDialog.close();
+    }
+  }
+
+  function resetAndStart() {
+    closeResetDialog();
+    answers = new Array(QUESTIONS.length).fill(null);
+    currentIndex = 0;
+    reviewMode = false;
+    clearStoredState();
+    updateProgressUI();
+    showQuiz();
+    showToast("答案已清空，开始新的探索。");
+  }
+
+  /* =========================================================
+     事件绑定与初始化
+     ========================================================= */
+
+  function bindEvents() {
+    document.querySelectorAll(".js-start").forEach(function (button) {
+      button.addEventListener("click", handleStart);
+    });
+
+    document.querySelectorAll("[data-scroll]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        scrollToSection(button.getAttribute("data-scroll"));
+      });
+    });
+
+    dom.homeBrand.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: reduceMotion() ? "auto" : "smooth" });
+    });
+
+    dom.resumeContinue.addEventListener("click", handleStart);
+    dom.resumeReset.addEventListener("click", openResetDialog);
+
+    dom.quizBrand.addEventListener("click", exitQuiz);
+    dom.exitQuizBtn.addEventListener("click", exitQuiz);
+    dom.prevBtn.addEventListener("click", goPrevious);
+    dom.nextBtn.addEventListener("click", goNext);
+    dom.reviewFinishBtn.addEventListener("click", finishQuiz);
+
+    dom.questionPanel.addEventListener("click", function (event) {
+      var option = event.target.closest(".option");
+      if (!option) {
+        return;
+      }
+      selectAnswer(Number(option.getAttribute("data-option-index")));
+    });
+
+    dom.questionPanel.addEventListener("keydown", handleOptionKeydown);
+
+    dom.answerMap.addEventListener("click", function (event) {
+      var mapButton = event.target.closest(".map-btn");
+      if (!mapButton) {
+        return;
+      }
+      jumpToQuestion(Number(mapButton.getAttribute("data-question-index")));
+    });
+
+    dom.modifyBtn.addEventListener("click", enterReviewMode);
+    dom.resultBrand.addEventListener("click", goHomeFromResult);
+    dom.resultHomeTop.addEventListener("click", goHomeFromResult);
+    dom.resultHomeBtn.addEventListener("click", goHomeFromResult);
+
+    document.querySelectorAll(".js-restart").forEach(function (button) {
+      button.addEventListener("click", openResetDialog);
+    });
+
+    if (dom.resetDialog) {
+      dom.resetDialog.querySelectorAll("[data-dialog-close]").forEach(function (button) {
+        button.addEventListener("click", closeResetDialog);
+      });
+      dom.resetDialog.addEventListener("click", function (event) {
+        if (event.target === dom.resetDialog) {
+          closeResetDialog();
+        }
+      });
+      dom.confirmReset.addEventListener("click", resetAndStart);
+    }
+
+    window.addEventListener("pagehide", saveState);
+  }
+
+  function init() {
+    storageAvailable = testStorage();
+    restoreState();
+    bindEvents();
+    updateSaveStatus();
+    updateHomeState();
+    showView("home");
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
